@@ -1,0 +1,18 @@
+# Compiled files
+*.o
+*.out
+chess
+a.out
+
+# Editor files
+*.swp
+*~
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Save files (optional - decide if you want to track these)
+saves/*.txt
