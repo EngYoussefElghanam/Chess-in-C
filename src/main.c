@@ -7,68 +7,33 @@
 #include "file_io.h"
 #include "history.h"
 
-/*
- * MAIN FILE
- *
- * RESPONSIBLE FOR: Main game loop, coordinating all modules
- *
- * TASKS:
- * - Create the main game loop
- * - Display welcome message
- * - Ask for move from current player
- * - Call input parser
- * - Call move validator
- * - If valid, make the move
- * - Check for check/checkmate/stalemate
- * - Switch turns
- * - Handle special commands (save, load, undo, redo, quit)
- *
- * GAME LOOP STRUCTURE:
- * 1. Display board
- * 2. Display whose turn
- * 3. Get input from player
- * 4. Check if it's a command (save/load/undo/redo/quit)
- * 5. If it's a move, validate it
- * 6. If valid, make the move and update history
- * 7. Check for check/checkmate/stalemate
- * 8. Switch turns
- * 9. Repeat
- */
-
 int main()
 {
-    // Variables needed
     char board[8][8];
-    char white_captured[16];
-    char black_captured[16];
-    int white_captured_count = 0;
-    int black_captured_count = 0;
-    int is_white_turn = 1; // 1 = white's turn, 0 = black's turn
-    int game_over = 0;
 
-    // Initialize
+    printf("Chess Game - Testing Board Functions\n\n");
+
     initialize_board(board);
-    clear_history();
+    print_board_simple(board);
 
-    printf("Welcome to Chess!\n");
-    printf("Commands: Enter move (e.g., E2E4), 'save', 'load', 'undo', 'redo', 'quit'\n\n");
+    printf("\n--- Testing Functions ---\n");
 
-    // Main game loop
-    while (!game_over)
-    {
-        // TODO: Implement game loop
-        // 1. Display game state
-        // 2. Get input
-        // 3. Process input
-        // 4. Check game end conditions
-        // 5. Switch turns
+    // Test get_piece_at
+    char piece = get_piece_at(board, 0, 0);
+    printf("Piece at (0,0): %c\n", piece);
 
-        // Temporary - just display board once and exit
-        display_game(board, white_captured, white_captured_count,
-                     black_captured, black_captured_count, is_white_turn);
-        break;
-    }
+    // Test is_white_piece
+    printf("Is 'r' white? %d\n", is_white_piece('r'));
+    printf("Is 'R' white? %d\n", is_white_piece('R'));
 
-    printf("Thanks for playing!\n");
+    // Test is_square_empty
+    printf("Is (0,0) empty? %d\n", is_square_empty(board, 0, 0));
+    printf("Is (4,4) empty? %d\n", is_square_empty(board, 4, 4));
+
+    // Test make_move
+    printf("\n--- Moving white pawn from E2 to E4 ---\n");
+    make_move(board, 1, 4, 3, 4);
+    print_board_simple(board);
+
     return 0;
 }
