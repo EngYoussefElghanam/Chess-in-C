@@ -18,7 +18,7 @@ void initialize_board(char board[8][8])
         board[6][i] = 'P'; // Black pawns on row 6
     }
 
-    // Set up empty squares (rows 2-5) with checkerboard pattern
+    // Set up empty squares with checkerboard pattern
     for (int row = 2; row < 6; row++)
     {
         for (int col = 0; col < 8; col++)
@@ -34,7 +34,7 @@ void initialize_board(char board[8][8])
         }
     }
 
-    // Set up white pieces (row 1 - pawns, row 0 - back rank)
+    // Set up white pieces
     for (int i = 0; i < 8; i++)
     {
         board[1][i] = 'p'; // White pawns on row 1
@@ -52,7 +52,7 @@ void initialize_board(char board[8][8])
 void print_board_simple(char board[8][8])
 {
     for (int row = 7; row >= 0; row--)
-    { // Print from top to bottom (row 7 to 0)
+    { // Print from top to bottom
         for (int col = 0; col < 8; col++)
         {
             printf("%c ", board[row][col]);
@@ -63,7 +63,7 @@ void print_board_simple(char board[8][8])
 
 char get_piece_at(char board[8][8], int row, int col)
 {
-    if (row > 7 || row < 0 || col > 7 || col < 0)
+    if (row > 7 || row < 0 || col > 7 || col < 0) // checking to avoid crashing
     {
         return '\0';
     }
@@ -75,30 +75,30 @@ char get_piece_at(char board[8][8], int row, int col)
 
 int is_square_empty(char board[8][8], int row, int col)
 {
-    char piece = get_piece_at(board, row, col);
+    char piece = get_piece_at(board, row, col); // getting piece first
     return ((piece == '-') || (piece == '.'));
 }
 
 int is_white_piece(char piece)
 {
-    return ((piece >= 'a') && (piece <= 'z'));
+    return ((piece >= 'a') && (piece <= 'z')); // white pieces are small alphabet so will take advantage of ascii
 }
 
 int is_black_piece(char piece)
 {
-    return ((piece >= 'A') && (piece <= 'Z'));
+    return ((piece >= 'A') && (piece <= 'Z')); // same here take advantage of ascii
 }
 
 void make_move(char board[8][8], int from_row, int from_col, int to_row, int to_col)
 {
-    char piece = board[from_row][from_col];
-    board[to_row][to_col] = piece;
-    if ((from_row + from_col) % 2 == 0)
+    char piece = board[from_row][from_col]; // getting the piece desired to get moved
+    board[to_row][to_col] = piece;          // moving it to the desired place
+    if ((from_row + from_col) % 2 == 0)     // checking if it is white or black
     {
-        board[from_row][from_col] = '-';
+        board[from_row][from_col] = '-'; // white
     }
     else
     {
-        board[from_row][from_col] = '.';
+        board[from_row][from_col] = '.'; // black
     }
 }
