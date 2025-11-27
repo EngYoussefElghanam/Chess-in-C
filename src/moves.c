@@ -1,6 +1,7 @@
 #include "../include/moves.h"
 #include "../include/board.h"
 #include <stdlib.h>
+#include <ctype.h>
 // knight moves in L shape regardless of what is in the way
 // except if there's a team-mate on the desired square this will be handled in the main move validation
 int is_valid_knight_move(int from_row, int from_col, int to_row, int to_col)
@@ -73,4 +74,75 @@ int is_valid_bishop_move(char board[8][8], int from_row, int from_col, int to_ro
 int is_valid_queen_move(char board[8][8], int from_row, int from_col, int to_row, int to_col)
 {
     return is_valid_bishop_move(board, from_row, from_col, to_row, to_col) || is_valid_rook_move(board, from_row, from_col, to_row, to_col);
+}
+
+// moves one square in any direction
+int is_valid_king_move(int from_row, int from_col, int to_row, int to_col)
+{
+    int condition1 = (abs(from_col - to_col) == 1 && abs(from_row - to_row) == 0);
+    int condition2 = (abs(from_row - to_row) == 1 && abs(from_col - to_col) == 0);
+    int condition3 = (abs(from_row - to_row) == 1 && abs(from_col - to_col) == 1);
+    // notice we didn't include path clear cause it is only one square no paths
+    // about if there's a teammate in the desired square or there's a check we will handle that later
+    return (condition1 || condition2 || condition3);
+}
+
+int is_valid_pawn_move(char board[8][8], int from_row, int from_col, int to_row, int to_col, int is_white)
+{
+    // implement pawn rules
+    // - move forward 1 square
+    // - move forward 2 squares on first move
+    // - capture diagonally
+    // - cannot move backward
+    return 0; // placeholder
+}
+// main move validation will check on general on any move and that is the one will be used
+int is_valid_move(char board[8][8], int from_row, int from_col, int to_row, int to_col, int is_white_turn)
+{
+    if (from_row < 0 || from_row > 7 || from_col < 0 || from_col > 7 ||
+        to_row < 0 || to_row > 7 || to_col < 0 || to_col > 7)
+    {
+        return 0; // out of bounds
+    }
+    char piece = get_piece_at(board, from_row, from_col);
+    char desired_place = get_piece_at(board, to_row, to_col);
+    if (is_square_empty(board, from_row, from_col))
+    {
+        return 0; // no piece to move
+    }
+    if (!is_square_empty(board, to_row, to_col))
+    {
+        if (is_white_piece(desired_place) && is_white_turn) // teammate on the desired square
+        {
+            return 0;
+        }
+        if (!is_white_piece(desired_place) && !is_white_turn) // teammate on the desired square
+        {
+            return 0;
+        }
+    }
+    char piece_type = tolower(piece);
+    switch (piece_type)
+    {
+    case 'r':
+        return is_valid_rook_move(board, from_row, from_col, to_row, to_col);
+        break;
+    case 'b':
+        return is_valid_bishop_move(board, from_row, from_col, to_row, to_col);
+        break;
+    case 'q':
+        return is_valid_queen_move(board, from_row, from_col, to_row, to_col);
+        break;
+    case 'k':
+        return is_valid_king_move(from_row, from_col, to_row, to_col);
+        break;
+    case 'n':
+        return is_valid_knight_move(from_row, from_col, to_row, to_col);
+        break;
+    case 'p':
+        return is_valid_pawn_move(board, from_row, from_col, to_row, to_col, is_white_turn);
+        break;
+    default:
+        return 0;
+    }
 }
