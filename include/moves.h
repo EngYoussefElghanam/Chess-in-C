@@ -22,11 +22,19 @@
  * - Read chess rules carefully from Wikipedia link in project PDF
  */
 
+typedef struct
+{
+    int from_row;
+    int from_col;
+    int to_row;
+    int to_col;
+    char piece_moved;
+} LastMove;
 // Main move validation function - returns 1 if valid, 0 if invalid
-int is_valid_move(char board[8][8], int from_row, int from_col, int to_row, int to_col, int is_white_turn);
+int is_valid_move(char board[8][8], int from_row, int from_col, int to_row, int to_col, int is_white_turn, LastMove *last_move);
 
 // Validate pawn movement
-int is_valid_pawn_move(char board[8][8], int from_row, int from_col, int to_row, int to_col, int is_white);
+int is_valid_pawn_move(char board[8][8], int from_row, int from_col, int to_row, int to_col, int is_white, LastMove *last_move);
 
 // Validate rook movement (straight lines)
 int is_valid_rook_move(char board[8][8], int from_row, int from_col, int to_row, int to_col);
