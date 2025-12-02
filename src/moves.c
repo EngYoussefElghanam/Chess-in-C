@@ -1,5 +1,6 @@
 #include "../include/moves.h"
 #include "../include/board.h"
+#include "../include/game.h"
 #include <stdlib.h>
 #include <ctype.h>
 // knight moves in L shape regardless of what is in the way
@@ -212,6 +213,10 @@ int is_valid_move(char board[8][8], int from_row, int from_col, int to_row, int 
     {
         return 0; // out of bounds
     }
+    if (from_col == to_col && from_row == to_row)
+    {
+        return 0;
+    }
     char piece = get_piece_at(board, from_row, from_col);
     char desired_place = get_piece_at(board, to_row, to_col);
     if (is_square_empty(board, from_row, from_col))
@@ -242,6 +247,21 @@ int is_valid_move(char board[8][8], int from_row, int from_col, int to_row, int 
     if (!is_white_turn && !is_black_piece(piece))
     {
         return 0; // not black's piece
+    }
+    // check if it puts or leaves king in check
+    // first simulate the move and try to see if there a check or not
+    char from = board[from_row][from_col];
+    char to = board[to_row][to_col];
+    board[to_row][to_col] = from;
+    board[from_row][from_col] = (from_row + from_col) % 2 == 0 ? '-' : '.';
+    int is_check = is_king_in_check(board, is_white_turn);
+    // now we have to return the board to not miss things up
+    board[to_row][to_col] = to;
+    board[from_row][from_col] = from;
+    // now check why not earlier? cause if it succeeded and we terminate the function before restoring board we messed the game up
+    if (is_check)
+    {
+        return 0;
     }
     char piece_type = tolower(piece);
     switch (piece_type)
