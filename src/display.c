@@ -17,7 +17,7 @@ void display_board(char board[8][8])
             }
         }
     }
-    // (A to H) for column indexing and (1 to 8) for row indexing displaying
+    // (A to H) for column indexing and (1 to 8) for row indexing displaying.
     printf("\t");
     for (int i = 65; i <= 72; i++)
     {
