@@ -21,30 +21,19 @@
  * - Must validate that input is correct format!
  */
 
-// Structure to hold a parsed move
-// typedef struct
-// {
-//     int from_row;
-//     int from_col;
-//     int to_row;
-//     int to_col;
-//     char promotion_piece; // '\0' if not a promotion move
-//     int is_valid_format;  // 1 if format is correct, 0 if invalid
-// } ParsedMove;
+// checking character index validation
+int valid_char(char *c);
 
-// // Get input from user (reads a line from stdin)
-// void get_user_input(char *buffer, int max_length);
+// checking row number index validation
+int valid_int(int *n);
 
-// // Parse move string (e.g., "A3B4") into row/column numbers
-// ParsedMove parse_move(char *input);
-// // Convert column letter to number (A->0, B->1, ... H->7)
-// int column_to_index(char column);
+// scanning inputs and printing Errors
+void input_validation(char *from_char, char *to_char, int *from_row, int *to_row);
 
-// // Convert row number to index (1->0, 2->1, ... 8->7)
-// int row_to_index(char row);
+// convert from (A to H)index to(0 to 7)index
+void convert_col_index(char *from_char, char *to_char, int *from_col, int *to_col);
 
-// Validate that input format is correct (A-H for columns, 1-8 for rows)
-int valid_char(char c);
-int valid_int(int n);
+// convert from(1 to 8)index to (0 to 7)index
+void convert_row_index(int *from_row, int *to_row);
 
 #endif
