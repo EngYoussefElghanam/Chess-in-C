@@ -1,10 +1,10 @@
 #include "../include/input.h"
 #include <stdio.h>
-
+#include <ctype.h>
 // checking character index validation
 int valid_col(char *c)
 {
-    return ((*c >= 'A') && (*c <= 'H'));
+    return (((*c >= 'A') && (*c <= 'H')) || ((*c >= 'a') && (*c <= 'h')));
 }
 
 // checking row number index validation
@@ -53,6 +53,8 @@ void input_validation(char *from_col_char, char *to_col_char, char *from_row_cha
 // convert from (A to H)index to(0 to 7)index
 void convert_col_index(char *from_col_char, char *to_col_char, int *from_col, int *to_col)
 {
+    *from_col_char = toupper(*from_col_char);
+    *to_col_char = toupper(*to_col_char);
     *from_col = *from_col_char - 'A';
     *to_col = *to_col_char - 'A';
 }
