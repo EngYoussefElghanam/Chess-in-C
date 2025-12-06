@@ -22,18 +22,17 @@
  */
 
 // checking character index validation
-int valid_char(char *c);
+int valid_col(char *c);
 
 // checking row number index validation
-int valid_int(int *n);
+int valid_row(char *n);
 
 // scanning inputs and printing Errors
-void input_validation(char *from_char, char *to_char, int *from_row, int *to_row);
+void input_validation(char *from_col_char, char *to_col_char, char *from_row_char, char *to_row_char);
 
 // convert from (A to H)index to(0 to 7)index
-void convert_col_index(char *from_char, char *to_char, int *from_col, int *to_col);
+void convert_col_index(char *from_col_char, char *to_col_char, int *from_col, int *to_col);
 
 // convert from(1 to 8)index to (0 to 7)index
-void convert_row_index(int *from_row, int *to_row);
-
+void convert_row_index(char *from_row_char, char *to_row_char, int *from_row, int *to_row);
 #endif

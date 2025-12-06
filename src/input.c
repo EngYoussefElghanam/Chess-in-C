@@ -2,32 +2,44 @@
 #include <stdio.h>
 
 // checking character index validation
-int valid_char(char *c)
+int valid_col(char *c)
 {
-    return ((*c >= 65) && (*c <= 72));
+    return ((*c >= 'A') && (*c <= 'H'));
 }
 
 // checking row number index validation
-int valid_int(int *n)
+int valid_row(char *n)
 {
-    return ((*n >= 1) && (*n <= 8));
+    return ((*n >= '1') && (*n <= '8'));
 }
 
 // scanning inputs and printing Errors
-void input_validation(char *from_char, char *to_char, int *from_row, int *to_row)
+void input_validation(char *from_col_char, char *to_col_char, char *from_row_char, char *to_row_char)
 {
 
     int Error_flag = 1;
     while (Error_flag)
     {
-        scanf("%c%d%c%d", from_char, from_row, to_char, to_row);
+        char c[4]; // from_char, from_row, to_char, to_row
 
+        for (int i = 0; i < 4; i++)
+        {
+            scanf("%c", &c[i]);
+            if (c[i] == ' ')
+            {
+                i--;
+            }
+        }
+        *from_col_char = c[0];
+        *from_row_char = c[1];
+        *to_col_char = c[2];
+        *to_row_char = c[3];
         // cleaning buffer from extra length user input
         while ((getchar()) != '\n')
             ;
 
         // checking input validation
-        if (valid_char(from_char) && valid_char(to_char) && valid_int(from_row) && valid_int(to_row))
+        if (valid_col(from_col_char) && valid_col(to_col_char) && valid_row(from_row_char) && valid_row(to_row_char))
         {
             Error_flag = 0;
         }
@@ -39,15 +51,15 @@ void input_validation(char *from_char, char *to_char, int *from_row, int *to_row
 }
 
 // convert from (A to H)index to(0 to 7)index
-void convert_col_index(char *from_char, char *to_char, int *from_col, int *to_col)
+void convert_col_index(char *from_col_char, char *to_col_char, int *from_col, int *to_col)
 {
-    *from_col = *from_char - 65;
-    *to_col = *to_char - 65;
+    *from_col = *from_col_char - 'A';
+    *to_col = *to_col_char - 'A';
 }
 
 // convert from(1 to 8)index to (0 to 7)index
-void convert_row_index(int *from_row, int *to_row)
+void convert_row_index(char *from_row_char, char *to_row_char, int *from_row, int *to_row)
 {
-    *from_row -= 1;
-    *to_row -= 1;
+    *from_row = *from_row_char - '1';
+    *to_row = *to_row_char - '1';
 }
