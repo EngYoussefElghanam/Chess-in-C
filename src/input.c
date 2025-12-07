@@ -25,7 +25,7 @@ void input_validation(char *from_col_char, char *to_col_char, char *from_row_cha
         for (int i = 0; i < 4; i++)
         {
             scanf("%c", &c[i]);
-            if (c[i] == ' ')
+            if ((c[i] == ' ') || (c[i] == '\n') || (c[i] == '\t'))
             {
                 i--;
             }
@@ -45,7 +45,7 @@ void input_validation(char *from_col_char, char *to_col_char, char *from_row_cha
         }
         else
         {
-            printf("Error Please try again !\n");
+            printf("ERROR!!..Enter move (e.g E2E4) or command (save/load/undo/redo/quit):\n");
         }
     }
 }
