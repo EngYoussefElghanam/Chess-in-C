@@ -11,7 +11,7 @@
 // save board
 int save_board(char *file_name_input, char board[8][8])
 {
-    // file name suffix
+    // file name suffix.
     strcat(file_name_input, "_board.txt");
 
     // open the file to write

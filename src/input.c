@@ -12,7 +12,7 @@ int valid_col(char *c)
     return (((*c >= 'A') && (*c <= 'H')) || ((*c >= 'a') && (*c <= 'h')));
 }
 
-// checking row number index validation
+// checking row number index validation.
 int valid_row(char *n)
 {
     return ((*n >= '1') && (*n <= '8'));

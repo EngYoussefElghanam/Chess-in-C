@@ -24,7 +24,7 @@
 // checking character index validation
 int valid_col(char *c);
 
-// checking row number index validation
+// checking row number index validation.
 int valid_row(char *n);
 
 // handling inputs and printing Errors

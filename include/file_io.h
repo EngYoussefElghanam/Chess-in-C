@@ -29,7 +29,7 @@ int save_board(char *file_name, char board[8][8]);
 // save the current captured pieces
 int save_captured(char *file_name, char captured_pieces[2][16]);
 
-// save the current turn
+// save the current turn.
 int save_turn(char *file_name, int *is_white_turn);
 
 // Save the current game to a file
