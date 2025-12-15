@@ -36,8 +36,9 @@ void find_king(char board[8][8], int *king_row, int *king_col, int is_white_king
 int is_king_in_check(char board[8][8], int is_white_king)
 {
     int king_row, king_col;
-    LastMove dummy_move = {-1, -1, -1, -1, '\0'}; // this is dummy last move it is not possible but either way we don't care about last move now
+    LastMove dummy_move = {-1, -1, -1, -1, '\0'};
     find_king(board, &king_row, &king_col, is_white_king);
+
     for (int i = 0; i < 8; i++)
     {
         for (int j = 0; j < 8; j++)
@@ -49,14 +50,16 @@ int is_king_in_check(char board[8][8], int is_white_king)
             }
             if (is_white_king && is_black_piece(piece))
             {
-                if (is_valid_move(board, i, j, king_row, king_col, 0, &dummy_move))
+                // Use NO CHECK version to avoid recursion!
+                if (is_valid_move_no_check(board, i, j, king_row, king_col, 0, &dummy_move))
                 {
                     return 1;
                 }
             }
             if (!is_white_king && is_white_piece(piece))
             {
-                if (is_valid_move(board, i, j, king_row, king_col, 1, &dummy_move))
+                // Use NO CHECK version to avoid recursion!
+                if (is_valid_move_no_check(board, i, j, king_row, king_col, 1, &dummy_move))
                 {
                     return 1;
                 }
@@ -65,7 +68,6 @@ int is_king_in_check(char board[8][8], int is_white_king)
     }
     return 0;
 }
-
 int can_promote(char board[8][8], int row, int col) // checking if pawn can promote
 {
     char piece = board[row][col];

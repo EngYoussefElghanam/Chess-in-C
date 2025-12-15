@@ -54,4 +54,9 @@ int is_valid_king_move(int from_row, int from_col, int to_row, int to_col);
 // Check if path between two squares is clear (for rook, bishop, queen)
 int is_path_clear(char board[8][8], int from_row, int from_col, int to_row, int to_col);
 
+// making one with no check so no stackoverflow happens
+int is_valid_move_no_check(char board[8][8], int from_row, int from_col,
+                           int to_row, int to_col, int is_white_turn,
+                           LastMove *last_move);
+
 #endif

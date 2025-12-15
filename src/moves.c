@@ -11,9 +11,6 @@ int is_valid_knight_move(int from_row, int from_col, int to_row, int to_col)
     int col_diff = abs(to_col - from_col);
     return ((row_diff == 2 && col_diff == 1) || (row_diff == 1 && col_diff == 2)); // this ensures that it is L shaped move
 }
-// checking if path is clear (no piece is on the way)
-#include <stdlib.h> // Add this at top for abs()
-
 // Check if path between two squares is clear (no pieces blocking)
 int is_path_clear(char board[8][8], int from_row, int from_col, int to_row, int to_col)
 {
@@ -205,86 +202,97 @@ int is_valid_pawn_move(char board[8][8], int from_row, int from_col, int to_row,
         return 0;
     }
 }
-// main move validation will check on general on any move and that is the one will be used
-int is_valid_move(char board[8][8], int from_row, int from_col, int to_row, int to_col, int is_white_turn, LastMove *last_move)
+
+int is_valid_move_no_check(char board[8][8], int from_row, int from_col, int to_row, int to_col, int is_white_turn, LastMove *last_move)
 {
+    // All your current validation EXCEPT the is_king_in_check part
     if (from_row < 0 || from_row > 7 || from_col < 0 || from_col > 7 ||
         to_row < 0 || to_row > 7 || to_col < 0 || to_col > 7)
     {
-        return 0; // out of bounds
+        return 0;
     }
+
     if (from_col == to_col && from_row == to_row)
     {
         return 0;
     }
+
     char piece = get_piece_at(board, from_row, from_col);
     char desired_place = get_piece_at(board, to_row, to_col);
-    if (is_square_empty(board, from_row, from_col))
-    {
-        return 0; // no piece to move
-    }
-    if (!is_square_empty(board, to_row, to_col))
-    {
-        if (is_white_piece(desired_place) && is_white_turn) // teammate on the desired square
-        {
-            return 0;
-        }
-        if (!is_white_piece(desired_place) && !is_white_turn) // teammate on the desired square
-        {
-            return 0;
-        }
-    }
-    if (is_square_empty(board, from_row, from_col))
-    {
-        return 0; // No piece to move
-    }
 
-    // check if it's the correct player's piece
-    if (is_white_turn && !is_white_piece(piece))
-    {
-        return 0; // not white's piece
-    }
-    if (!is_white_turn && !is_black_piece(piece))
-    {
-        return 0; // not black's piece
-    }
-    // check if it puts or leaves king in check
-    // first simulate the move and try to see if there a check or not
-    char from = board[from_row][from_col];
-    char to = board[to_row][to_col];
-    board[to_row][to_col] = from;
-    board[from_row][from_col] = (from_row + from_col) % 2 == 0 ? '-' : '.';
-    int is_check = is_king_in_check(board, is_white_turn);
-    // now we have to return the board to not miss things up
-    board[to_row][to_col] = to;
-    board[from_row][from_col] = from;
-    // now check why not earlier? cause if it succeeded and we terminate the function before restoring board we messed the game up
-    if (is_check)
+    if (is_square_empty(board, from_row, from_col))
     {
         return 0;
     }
+
+    // Fixed teammate check
+    if (!is_square_empty(board, to_row, to_col))
+    {
+        if (is_white_piece(desired_place) && is_white_turn)
+        {
+            return 0;
+        }
+        if (is_black_piece(desired_place) && !is_white_turn) // ✅ Fixed
+        {
+            return 0;
+        }
+    }
+
+    if (is_white_turn && !is_white_piece(piece))
+    {
+        return 0;
+    }
+    if (!is_white_turn && !is_black_piece(piece))
+    {
+        return 0;
+    }
+
+    // Validate piece-specific movement (NO check prevention here)
     char piece_type = tolower(piece);
     switch (piece_type)
     {
     case 'r':
         return is_valid_rook_move(board, from_row, from_col, to_row, to_col);
-        break;
     case 'b':
         return is_valid_bishop_move(board, from_row, from_col, to_row, to_col);
-        break;
     case 'q':
         return is_valid_queen_move(board, from_row, from_col, to_row, to_col);
-        break;
     case 'k':
         return is_valid_king_move(from_row, from_col, to_row, to_col);
-        break;
     case 'n':
         return is_valid_knight_move(from_row, from_col, to_row, to_col);
-        break;
     case 'p':
         return is_valid_pawn_move(board, from_row, from_col, to_row, to_col, is_white_turn, last_move);
-        break;
     default:
         return 0;
     }
+}
+
+// Full validation WITH check prevention
+int is_valid_move(char board[8][8], int from_row, int from_col, int to_row, int to_col, int is_white_turn, LastMove *last_move)
+{
+    // First check basic movement
+    if (!is_valid_move_no_check(board, from_row, from_col, to_row, to_col,
+                                is_white_turn, last_move))
+    {
+        return 0;
+    }
+
+    // Now check if move leaves king in check
+    char from = board[from_row][from_col];
+    char to = board[to_row][to_col];
+    board[to_row][to_col] = from;
+    board[from_row][from_col] = (from_row + from_col) % 2 == 0 ? '-' : '.';
+
+    int is_check = is_king_in_check(board, is_white_turn);
+
+    board[to_row][to_col] = to;
+    board[from_row][from_col] = from;
+
+    if (is_check)
+    {
+        return 0;
+    }
+
+    return 1;
 }
