@@ -35,4 +35,13 @@ void convert_col_index(char *from_col_char, char *to_col_char, int *from_col, in
 
 // convert from(1 to 8)index to (0 to 7)index
 void convert_row_index(char *from_row_char, char *to_row_char, int *from_row, int *to_row);
+
+// valid promotion  character
+int valid_promoted_char(char *c);
+
+// checking if pawn will promote
+int will_promote(char board[8][8], int *to_row, int *current_col);
+
+// addtional input if can promoted
+void promotion_input(char board[8][8], int *to_row, int *from_col, char *promoted_to);
 #endif

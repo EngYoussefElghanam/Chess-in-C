@@ -1,6 +1,7 @@
 #include "../include/input.h"
 #include "../include/file_io.h"
 #include "../include/board.h"
+#include "../include/game.h"
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -109,6 +110,64 @@ void input_handling(char *from_col_char, char *to_col_char, char *from_row_char,
                     }
                 }
             }
+        }
+    }
+}
+
+// valid promotion  character
+int valid_promoted_char(char *c)
+{
+    *c = tolower(*c);
+    return (((*c == 'r') || (*c == 'n') || (*c == 'b') || (*c == 'q')));
+}
+
+// checking if pawn will promote
+int will_promote(char board[8][8], int *to_row, int *from_col)
+{
+    char piece = board[*to_row - 1][*from_col];
+    if (piece == 'p' && *to_row == 7)
+    {
+        return 1;
+    }
+    if (piece == 'P' && *to_row == 0)
+    {
+        return 1;
+    }
+    return 0;
+}
+
+// additional input if pawn can promoted
+void promotion_input(char board[8][8], int *to_row, int *from_col, char *promoted_to)
+{
+    int Error_flag = 1;
+    while (Error_flag)
+    {
+        if (will_promote(board, to_row, from_col))
+        {
+            printf("Enter the piece you want to promote to\n");
+            for (int i = 0; i < 1; i++)
+            {
+                scanf("%c", promoted_to);
+                if ((*promoted_to == ' ') || (*promoted_to == '\n') || (*promoted_to == '\t'))
+                {
+                    i--;
+                }
+            }
+            // cleaning buffer from extra length user input
+            while ((getchar()) != '\n')
+                ;
+            if (valid_promoted_char(promoted_to))
+            {
+                Error_flag = 0;
+            }
+            else
+            {
+                printf("Error enter a valid character to promote to,Must be Q, R, B, or N\n");
+            }
+        }
+        else
+        {
+            Error_flag = 0;
         }
     }
 }
