@@ -2,6 +2,7 @@
 #include "../include/file_io.h"
 #include "../include/board.h"
 #include "../include/game.h"
+#include "../include/display.h"
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -97,6 +98,8 @@ void input_handling(char *from_col_char, char *to_col_char, char *from_row_char,
                         {
                             *is_black_turn = !*is_white_turn; // handling the current player turn
                             printf("GAME LOADED\n");
+                            printf("\033[2J\033[H"); // cleaning terminal (USELESS IN WINDOWS)
+                            display_board(board);
                         }
                         else // if returns an error
                         {
