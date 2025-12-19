@@ -3,6 +3,7 @@
 #include "../include/board.h"
 #include "../include/game.h"
 #include "../include/display.h"
+#include "../include/history.h"
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -21,7 +22,8 @@ int valid_row(char *n)
 }
 
 // scanning inputs and printing Errors
-void input_handling(char *from_col_char, char *to_col_char, char *from_row_char, char *to_row_char, char board[8][8], char captured_pieces[2][16], int *is_white_turn, int *is_black_turn)
+// scanning inputs and printing Errors
+void input_handling(char *from_col_char, char *to_col_char, char *from_row_char, char *to_row_char, char board[8][8], char captured_pieces[2][16], int *is_white_turn, int *is_black_turn, int *game_count, int *undo_flag)
 
 {
 
@@ -98,7 +100,7 @@ void input_handling(char *from_col_char, char *to_col_char, char *from_row_char,
                         {
                             *is_black_turn = !*is_white_turn; // handling the current player turn
                             printf("GAME LOADED\n");
-                            printf("\033[2J\033[H"); // cleaning terminal (USELESS IN WINDOWS)
+                            printf("\033[2J\033[H"); // cleaning terminal
                             display_board(board);
                         }
                         else // if returns an error
@@ -106,10 +108,56 @@ void input_handling(char *from_col_char, char *to_col_char, char *from_row_char,
                             printf("Error loading the game!\n");
                         }
                     }
-
-                    else // if an invalid user input
+                    else
                     {
-                        printf("ERROR!!..Enter move (e.g E2E4) or command (save/load/undo/redo/quit):\n");
+                        if ((c[0] == 'U') && (c[1] == 'N') && (c[2] == 'D') && (c[3] == 'O'))
+                        {
+                            *game_count -= 1;
+
+                            if (undo_game(board, captured_pieces, is_white_turn, *game_count) == 0)
+                            {
+                                printf("Undo GAME\n");
+                                *undo_flag += 1;
+
+                                printf("\033[2J\033[H"); // cleaning terminal
+                                display_board(board);
+                            }
+                            else
+                            {
+                                printf("Unsuccessful Undo!\n");
+                            }
+                        }
+                        else
+                        {
+                            if ((c[0] == 'R') && (c[1] == 'E') && (c[2] == 'D') && (c[3] == 'O'))
+                            {
+                                if (*undo_flag)
+                                {
+                                    *game_count += 1;
+                                    if (undo_game(board, captured_pieces, is_white_turn, *game_count) == 0)
+                                    {
+                                        printf("Redo GAME\n");
+                                        *undo_flag -= 1;
+                                        printf("\033[2J\033[H"); // cleaning terminal
+                                        display_board(board);
+                                    }
+
+                                    else
+                                    {
+                                        printf("Unsuccessful Redo!\n");
+                                    }
+                                }
+                                else
+                                {
+                                    printf("No  possible redo!\n");
+                                }
+                            }
+
+                            else // if an invalid user input
+                            {
+                                printf("ERROR!!..Enter move (e.g E2E4) or command (save/load/undo/redo/quit):\n");
+                            }
+                        }
                     }
                 }
             }
