@@ -1,6 +1,6 @@
 #ifndef MOVES_H
 #define MOVES_H
-
+#include "types.h"
 /*
  * MOVES MODULE
  *
@@ -22,16 +22,8 @@
  * - Read chess rules carefully from Wikipedia link in project PDF
  */
 
-typedef struct
-{
-    int from_row;
-    int from_col;
-    int to_row;
-    int to_col;
-    char piece_moved;
-} LastMove;
 // Main move validation function - returns 1 if valid, 0 if invalid
-int is_valid_move(char board[8][8], int from_row, int from_col, int to_row, int to_col, int is_white_turn, LastMove *last_move);
+int is_valid_move(gameState *Gs, int from_row, int from_col, int to_row, int to_col);
 
 // Validate pawn movement
 int is_valid_pawn_move(char board[8][8], int from_row, int from_col, int to_row, int to_col, int is_white, LastMove *last_move);
@@ -55,8 +47,10 @@ int is_valid_king_move(int from_row, int from_col, int to_row, int to_col);
 int is_path_clear(char board[8][8], int from_row, int from_col, int to_row, int to_col);
 
 // making one with no check so no stackoverflow happens
-int is_valid_move_no_check(char board[8][8], int from_row, int from_col,
-                           int to_row, int to_col, int is_white_turn,
-                           LastMove *last_move);
+int is_valid_move_no_check(gameState *Gs, int from_row, int from_col, int to_row, int to_col);
+int is_square_attacked(char board[8][8], int row, int col, int by_white);
+
+int is_path_attacked(char board[8][8], int from_row, int from_col, int to_col, int is_white);
+int is_valid_castling(gameState *Gs, int from_row, int from_col, int to_row, int to_col);
 
 #endif

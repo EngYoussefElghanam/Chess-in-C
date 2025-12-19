@@ -16,3 +16,5 @@ Thumbs.db
 
 # Save files (optional - decide if you want to track these)
 saves/*.txt
+
+test_chess.c

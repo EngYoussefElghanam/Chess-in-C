@@ -1,6 +1,6 @@
 #ifndef GAME_H
 #define GAME_H
-
+#include "types.h"
 /*
  * GAME MODULE
  *
@@ -21,6 +21,7 @@
  * - This is the HARDEST part of the project!
  */
 
+int find_king(char board[8][8], int *king_row, int *king_col, int is_white_king);
 // Check if the king of a specific color is in check
 int is_king_in_check(char board[8][8], int is_white_king);
 

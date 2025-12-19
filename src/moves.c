@@ -3,6 +3,7 @@
 #include "../include/game.h"
 #include <stdlib.h>
 #include <ctype.h>
+#include <string.h>
 // knight moves in L shape regardless of what is in the way
 // except if there's a team-mate on the desired square this will be handled in the main move validation
 int is_valid_knight_move(int from_row, int from_col, int to_row, int to_col)
@@ -83,6 +84,141 @@ int is_valid_king_move(int from_row, int from_col, int to_row, int to_col)
     // notice we didn't include path clear cause it is only one square no paths
     // about if there's a teammate in the desired square or there's a check we will handle that later
     return (condition1 || condition2 || condition3);
+}
+int is_square_attacked(char board[8][8], int row, int col, int by_white)
+{
+    int king_row;
+    int king_col;
+    // getting king's row and column
+    find_king(board, &king_row, &king_col, !by_white);
+    // storing the king either it is white or black
+    char king = board[king_row][king_col];
+    // moving the king temporarily
+    board[king_row][king_col] = (king_row + king_col) % 2 ? '-' : '.';
+    char temp = board[row][col];
+    board[row][col] = king;
+    // checking after simulation
+    int rtrnVal = is_king_in_check(board, !by_white);
+    // restoring everything before returning
+    board[row][col] = temp;
+    board[king_row][king_col] = king;
+    return rtrnVal;
+}
+int is_path_attacked(char board[8][8], int from_row, int from_col, int to_col, int is_white)
+{
+    int col_diff = to_col - from_col;
+    int step = (to_col > from_col) ? 1 : -1;
+    for (int c = from_col; c != to_col + step; c += step)
+    {
+        if (is_square_attacked(board, from_row, c, !is_white))
+            return 1;
+    }
+    return 0;
+}
+int is_valid_castling(gameState *Gs, int from_row, int from_col, int to_row, int to_col)
+{
+    char piece = Gs->board[from_row][from_col];
+    int is_white = Gs->is_white_turn;
+    int col_diff = to_col - from_col;
+    if (from_row != to_row)
+    {
+        return 0;
+    }
+
+    if (is_path_attacked(Gs->board, from_row, from_col, to_col, Gs->is_white_turn))
+    {
+        return 0;
+    }
+    if (abs(col_diff) != 2)
+    {
+        return 0;
+    }
+    if (tolower(piece) != 'k')
+    {
+        return 0;
+    }
+    if (is_king_in_check(Gs->board, Gs->is_white_turn))
+    {
+        return 0;
+    }
+    if (is_white)
+    {
+        if (Gs->white_king_moved)
+        {
+            return 0;
+        }
+        // king side castling
+        if (col_diff == 2)
+        {
+            if (!is_path_clear(Gs->board, from_row, from_col, 0, 7))
+            {
+                return 0;
+            }
+            if (Gs->board[0][7] != 'r')
+            {
+                return 0;
+            }
+            if (Gs->white_rook_h_moved)
+            {
+                return 0;
+            }
+        }
+        // Queen side castling
+        else if (col_diff == -2)
+        {
+            if (!is_path_clear(Gs->board, from_row, from_col, 0, 0))
+            {
+                return 0;
+            }
+            if (Gs->board[0][0] != 'r')
+            {
+                return 0;
+            }
+            if (Gs->white_rook_a_moved)
+            {
+                return 0;
+            }
+        }
+    }
+    else if (!is_white)
+    {
+        if (Gs->black_king_moved)
+        {
+            return 0;
+        }
+        // king castling
+        if (col_diff == 2)
+        {
+            if (!is_path_clear(Gs->board, from_row, from_col, 7, 7))
+            {
+                return 0;
+            }
+            if (Gs->board[7][7] != 'R')
+            {
+                return 0;
+            }
+            if (Gs->black_rook_h_moved)
+            {
+                return 0;
+            }
+        }
+        else if (col_diff == -2)
+        {
+            if (!is_path_clear(Gs->board, from_row, from_col, 7, 0))
+            {
+                return 0;
+            }
+            if (Gs->board[7][0] != 'R')
+            {
+                return 0;
+            }
+            if (Gs->black_rook_a_moved)
+            {
+                return 0;
+            }
+        }
+    }
+    return 1;
 }
 
 int is_valid_pawn_move(char board[8][8], int from_row, int from_col, int to_row, int to_col, int is_white,
@@ -203,7 +339,7 @@ int is_valid_pawn_move(char board[8][8], int from_row, int from_col, int to_row,
     }
 }
 
-int is_valid_move_no_check(char board[8][8], int from_row, int from_col, int to_row, int to_col, int is_white_turn, LastMove *last_move)
+int is_valid_move_no_check(gameState *Gs, int from_row, int from_col, int to_row, int to_col)
 {
     // All your current validation EXCEPT the is_king_in_check part
     if (from_row < 0 || from_row > 7 || from_col < 0 || from_col > 7 ||
@@ -216,7 +352,10 @@ int is_valid_move_no_check(char board[8][8], int from_row, int from_col, int to_
     {
         return 0;
     }
-
+    char board[8][8];
+    memcpy(board, Gs->board, sizeof(board));
+    int is_white_turn = Gs->is_white_turn;
+    LastMove *last_move = Gs->last_move;
     char piece = get_piece_at(board, from_row, from_col);
     char desired_place = get_piece_at(board, to_row, to_col);
 
@@ -232,7 +371,7 @@ int is_valid_move_no_check(char board[8][8], int from_row, int from_col, int to_
         {
             return 0;
         }
-        if (is_black_piece(desired_place) && !is_white_turn) // ✅ Fixed
+        if (is_black_piece(desired_place) && !is_white_turn) //  Fixed
         {
             return 0;
         }
@@ -258,7 +397,7 @@ int is_valid_move_no_check(char board[8][8], int from_row, int from_col, int to_
     case 'q':
         return is_valid_queen_move(board, from_row, from_col, to_row, to_col);
     case 'k':
-        return is_valid_king_move(from_row, from_col, to_row, to_col);
+        return is_valid_king_move(from_row, from_col, to_row, to_col) || is_valid_castling(Gs, from_row, from_col, to_row, to_col);
     case 'n':
         return is_valid_knight_move(from_row, from_col, to_row, to_col);
     case 'p':
@@ -269,11 +408,13 @@ int is_valid_move_no_check(char board[8][8], int from_row, int from_col, int to_
 }
 
 // Full validation WITH check prevention
-int is_valid_move(char board[8][8], int from_row, int from_col, int to_row, int to_col, int is_white_turn, LastMove *last_move)
+int is_valid_move(gameState *Gs, int from_row, int from_col, int to_row, int to_col)
 {
     // First check basic movement
-    if (!is_valid_move_no_check(board, from_row, from_col, to_row, to_col,
-                                is_white_turn, last_move))
+    char (*board)[8] = Gs->board;
+    int is_white_turn = Gs->is_white_turn;
+    LastMove *last_move = Gs->last_move;
+    if (!is_valid_move_no_check(Gs, from_row, from_col, to_row, to_col))
     {
         return 0;
     }
@@ -282,7 +423,7 @@ int is_valid_move(char board[8][8], int from_row, int from_col, int to_row, int 
     char from = board[from_row][from_col];
     char to = board[to_row][to_col];
     board[to_row][to_col] = from;
-    board[from_row][from_col] = (from_row + from_col) % 2 == 0 ? '-' : '.';
+    board[from_row][from_col] = (from_row + from_col) % 2 == 0 ? '.' : '-';
 
     int is_check = is_king_in_check(board, is_white_turn);
 
