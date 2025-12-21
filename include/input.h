@@ -47,4 +47,7 @@ int column_to_index(char column);
 // Convert row number to index (1->0, 2->1, ... 8->7)
 int row_to_index(char row);
 
+// scanning inputs and printing Errors
+void input_validation(char *from_char, char *to_char, int *from_row, int *to_row);
+
 #endif

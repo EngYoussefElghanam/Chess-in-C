@@ -1,6 +1,7 @@
 #include "../include/board.h"
 #include <stdio.h>
 #include <ctype.h>
+#include <stdlib.h>
 
 void initialize_board(char board[8][8])
 {
@@ -101,4 +102,69 @@ void make_move(char board[8][8], int from_row, int from_col, int to_row, int to_
     {
         board[from_row][from_col] = '.'; // black
     }
+}
+
+char execute_move(char board[8][8], int from_row, int from_col, int to_row, int to_col)
+{
+    char piece_moving = board[from_row][from_col];
+    char captured_piece = board[to_row][to_col];
+    if (tolower(piece_moving) == 'p' && is_square_empty(board, to_row, to_col) && abs(to_col - from_col) == 1)
+    {
+        captured_piece = board[from_row][to_col];
+        if ((from_row + to_col) % 2 == 0)
+        {
+            board[from_row][to_col] = '-'; // white
+        }
+        else
+        {
+            board[from_row][to_col] = '.'; // black
+        }
+    }
+    if (tolower(piece_moving) == 'k' && abs(from_col - to_col) == 2)
+    {
+        int col_diff = to_col - from_col;
+        if (is_white_piece(piece_moving))
+        {
+            // king side Castling
+            if (col_diff == 2)
+            {
+                board[0][to_col] = piece_moving;
+                board[0][to_col - 1] = 'r';
+                board[0][7] = '-';
+                board[0][from_col] = '.';
+            }
+            // queen side Castling
+            else if (col_diff == -2)
+            {
+                board[0][to_col] = piece_moving;
+                board[0][to_col + 1] = 'r';
+                board[0][0] = '.';
+                board[0][from_col] = '.';
+            }
+        }
+        else if (!is_white_piece(piece_moving))
+        {
+            // king side Castling
+            if (col_diff == 2)
+            {
+                board[7][to_col] = piece_moving;
+                board[7][to_col - 1] = 'R';
+                board[7][7] = '.';
+                board[7][from_col] = '-';
+            }
+            // queen side Castling
+            else if (col_diff == -2)
+            {
+                board[7][to_col] = piece_moving;
+                board[7][to_col + 1] = 'R';
+                board[7][0] = '-';
+                board[7][from_col] = '-';
+            }
+        }
+    }
+    else
+    {
+        make_move(board, from_row, from_col, to_row, to_col);
+    }
+    return captured_piece;
 }
