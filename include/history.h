@@ -21,41 +21,12 @@
  * - Max moves = probably 500 should be enough
  */
 
-#define MAX_HISTORY 500
+// save game state for each turn
+int save_game_state(char board[8][8], char captured_pieces[2][16], int *is_white_turn);
 
-// Structure to store one move
-typedef struct
-{
-    int from_row;
-    int from_col;
-    int to_row;
-    int to_col;
-    char piece_moved;
-    char piece_captured; // '\0' if no piece was captured
-} MoveHistory;
+// undo game
+int undo_game(char board[8][8], char captured_pieces[2][16], int *is_white_turn, int game_count);
 
-// Global history array and counters (or you can pass them as parameters)
-extern MoveHistory history[MAX_HISTORY];
-extern int history_count;    // Number of moves in history
-extern int current_position; // Current position in history (for redo)
-
-// Add a move to history
-void add_move_to_history(int from_row, int from_col, int to_row, int to_col,
-                         char piece_moved, char piece_captured);
-
-// Undo the last move (returns 1 if successful, 0 if nothing to undo)
-int undo_move(char board[8][8]);
-
-// Redo a move that was undone (returns 1 if successful, 0 if nothing to redo)
-int redo_move(char board[8][8]);
-
-// Check if undo is possible
-int can_undo();
-
-// Check if redo is possible
-int can_redo();
-
-// Clear all history (for new game)
-void clear_history();
-
+// correction saving without previous undo game state
+int saving_correction(int count);
 #endif
