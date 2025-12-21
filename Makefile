@@ -16,7 +16,6 @@ SRCS = $(SRC_DIR)/main.c \
 
 # Convert source files to object files
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
-
 TARGET = chess
 
 all: $(TARGET)

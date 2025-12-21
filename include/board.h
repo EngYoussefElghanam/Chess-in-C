@@ -1,6 +1,6 @@
 #ifndef BOARD_H
 #define BOARD_H
-
+#include "types.h"
 /*
  * BOARD MODULE
  *
@@ -26,6 +26,7 @@ void initialize_board(char board[8][8]);
 
 // Make a move on the board (updates the board array)
 void make_move(char board[8][8], int from_row, int from_col, int to_row, int to_col);
+char execute_move(char board[8][8], int from_row, int from_col, int to_row, int to_col);
 
 // Get the piece at a specific position
 char get_piece_at(char board[8][8], int row, int col);
