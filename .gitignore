@@ -18,3 +18,4 @@ Thumbs.db
 saves/*.txt
 
 test_chess.c
+main.c

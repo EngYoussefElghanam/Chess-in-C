@@ -1,6 +1,8 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+#define MAX_POSITION_HISTORY 500 // Maximum positions to track
+
 // Define LastMove structure
 typedef struct
 {
@@ -10,6 +12,15 @@ typedef struct
     int to_col;
     char piece_moved;
 } LastMove;
+
+// Define a position hash for tracking repetitions
+typedef struct
+{
+    char board_state[64]; // Flattened board representation
+    int castling_rights;  // Encoded castling availability
+    int en_passant_col;   // -1 if no en passant, 0-7 for column
+    int is_white_turn;
+} PositionHash;
 
 // Define gameState structure
 typedef struct
@@ -23,6 +34,11 @@ typedef struct
     int black_rook_h_moved;
     int white_rook_h_moved;
     LastMove *last_move;
+
+    // For repetition detection
+    PositionHash position_history[MAX_POSITION_HISTORY];
+    int position_count;
+    int halfmove_clock; // For 50-move rule
 } gameState;
 
 #endif
