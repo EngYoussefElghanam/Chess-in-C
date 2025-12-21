@@ -23,9 +23,9 @@
  * - No need to save undo/redo history (project says so)
  */
 
-// Save the current game to a file
+// Save the current game to a file.
 int save_game(char *file_name, char board[8][8], char captured_pieces[2][16], int *is_white_turn);
 
-// load the current game to a file
+// load the current game to a file.
 int load_game(char *file_name, char board[8][8], char captured_pieces[2][16], int *is_white_turn);
 #endif
