@@ -28,5 +28,16 @@ int main()
     LastMove dummy = {-1, -1, -1, -1, '\0'};
     (&Gs)->last_move = &dummy;
     (&Gs)->position_count = 0;
+    int undo_flag = 0;
+    char *file = "^&@!~`'.txt";
+    remove(file);
+    int *is_white_turn = (&Gs)->is_white_turn;
+    char c1, c2, c3, c4;
+    char promoted;
+    int fromrow, torow, fromcol, tocol;
+    char captured_pieces[2][16];
+    int game_count = 0;
+    save_game_state(board, captured_pieces, is_white_turn);
+
     return 0;
 }
