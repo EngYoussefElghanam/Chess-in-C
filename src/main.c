@@ -38,6 +38,67 @@ int main()
     char captured_pieces[2][16];
     int game_count = 0;
     save_game_state(board, captured_pieces, is_white_turn);
-
+    int game_running = 1;
+    while (game_running)
+    {
+        // checking king safety
+        if (is_king_in_check(board, Gs.is_white_turn))
+        {
+            printf("⚠️====Check====⚠️\n");
+        }
+        if (is_checkmate(board, Gs.is_white_turn))
+        {
+            printf("###################################\n");
+            printf("#           Checkmate☠️            #\n");
+            printf("#                                 #\n");
+            is_white_turn ? printf("#            Black Won            #\n") : printf("#            White Won            #\n");
+            printf("###################################\n");
+            break;
+        }
+        if (is_stalemate(board, Gs.is_white_turn))
+        {
+            printf("###################################\n");
+            printf("#                                 #\n");
+            printf("#           Stalemate⛓️            #\n");
+            printf("#             Draw                #\n");
+            printf("#                                 #\n");
+            printf("###################################\n");
+            break;
+        }
+        if (is_draw_by_repetition(&Gs))
+        {
+            printf("Draw by repetition is reached!\n");
+            printf("Do you want to claim it? (y/n)");
+            char response;
+            for (int i = 0; i < 1; i++)
+            {
+                scanf("%c", &response);
+                if ((response == ' ') || (response == '\n') || (response == '\t'))
+                {
+                    i--;
+                }
+            }
+            if (strcmp(response, 'y') == 0)
+            {
+                printf("###################################\n");
+                printf("#                                 #\n");
+                printf("#           Draw by repetition    #\n");
+                printf("#             Draw🤝              #\n");
+                printf("#                                 #\n");
+                printf("###################################\n");
+                break;
+            }
+        }
+        if (is_draw_by_insufficient_material(board))
+        {
+            printf("###################################\n");
+            printf("#                                 #\n");
+            printf("#   Draw by insufficient material #\n");
+            printf("#             Draw🤝              #\n");
+            printf("#                                 #\n");
+            printf("###################################\n");
+            break;
+        }
+    }
     return 0;
 }
