@@ -32,8 +32,8 @@ int main()
     char *file = "^&@!~`'.txt";
     remove(file);
     int *is_white_turn = (&Gs)->is_white_turn;
-    char c1, c2, c3, c4;
-    char promoted;
+    char fromcol, fromrow, tocol, torow;
+    char promoted_to;
     int fromrow, torow, fromcol, tocol;
     char captured_pieces[2][16];
     int game_count = 0;
@@ -99,6 +99,11 @@ int main()
             printf("###################################\n");
             break;
         }
+        input_handling(&fromcol, &tocol, &fromrow, &torow, board, captured_pieces, is_white_turn, !is_white_turn, &game_count, &undo_flag);
+        int from_row, to_row, from_col, to_col;
+        convert_col_index(&fromcol, &tocol, &from_col, &to_col);
+        convert_row_index(&fromrow, &torow, &from_row, &to_row);
+        promotion_input(board, &to_row, &from_col, &promoted_to);
+        // we need resign , draw !!
+        return 0;
     }
-    return 0;
-}
