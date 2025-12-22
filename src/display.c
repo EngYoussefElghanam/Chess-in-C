@@ -1,0 +1,65 @@
+#include "../include/display.h"
+#include <stdio.h>
+
+void display_board(char board[8][8])
+{
+
+    // (A to H) for column indexing and (1 to 8) for row indexing displaying.
+    printf("\t");
+    for (char i = 'A'; i <= 'H'; i++)
+    {
+        printf("%c  ", i); // ASCII code for A:65 to H:72 .
+    }
+    printf("\n");
+    printf("\n");
+
+    for (char i = 7; i >= 0; i--)
+    { // Print from top to bottom
+
+        printf("%d\t", i + 1);
+
+        for (int j = 0; j < 8; j++)
+        {
+            printf("%c  ", board[i][j]);
+        }
+        printf("\t%d\n", i + 1);
+    }
+    printf("\n");
+
+    printf("\t");
+    for (char i = 'A'; i <= 'H'; i++)
+    {
+        printf("%c  ", i);
+    }
+
+    printf("\n"); // Tabs and newline spaces for better display.
+}
+
+void display_captured_pieces(char white_captured[], int white_count,
+                             char black_captured[], int black_count)
+{
+    for (int i = 0; i < white_count; i++)
+    {
+        printf("White captured pieces:\n");
+
+        printf("%c\t", white_captured[i]);
+    }
+    for (int j = 0; j < black_count; j++)
+    {
+        printf("Black captured pieces:\n");
+
+        printf("%c\t", black_captured[j]);
+    }
+}
+
+void display_turn(int is_white_turn)
+{
+    if (is_white_turn)
+    {
+        printf("This is White turn !\n");
+    }
+    else
+    {
+        printf("This is Black turn !\n");
+    }
+}
