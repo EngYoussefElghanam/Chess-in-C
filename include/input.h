@@ -40,8 +40,8 @@ void convert_row_index(char *from_row_char, char *to_row_char, int *from_row, in
 int valid_promoted_char(char *c);
 
 // checking if pawn will promote
-int will_promote(char board[8][8], int *to_row, int *current_col);
+int will_promote(char board[8][8], int *to_row, int *from_row, int *current_col);
 
 // addtional input if can promoted
-void promotion_input(char board[8][8], int *to_row, int *from_col, char *promoted_to);
+void promotion_input(char board[8][8], int *to_row, int *from_row, int *from_col, char *promoted_to);
 #endif
