@@ -102,6 +102,7 @@ void input_handling(char *from_col_char, char *to_col_char, char *from_row_char,
                             printf("GAME LOADED\n");
                             printf("\033[2J\033[H"); // cleaning terminal
                             display_board(board);
+                            display_turn(*is_white_turn);
                         }
                         else // if returns an error
                         {
@@ -121,6 +122,7 @@ void input_handling(char *from_col_char, char *to_col_char, char *from_row_char,
 
                                 printf("\033[2J\033[H"); // cleaning terminal
                                 display_board(board);
+                                display_turn(*is_white_turn);
                             }
                             else
                             {
@@ -140,6 +142,7 @@ void input_handling(char *from_col_char, char *to_col_char, char *from_row_char,
                                         *undo_flag -= 1;
                                         printf("\033[2J\033[H"); // cleaning terminal
                                         display_board(board);
+                                        display_turn(*is_white_turn);
                                     }
 
                                     else
@@ -173,9 +176,9 @@ int valid_promoted_char(char *c)
 }
 
 // checking if pawn will promote
-int will_promote(char board[8][8], int *to_row, int *from_col)
+int will_promote(char board[8][8], int *to_row, int *from_row, int *from_col)
 {
-    char piece = board[*to_row - 1][*from_col];
+    char piece = board[*from_row][*from_col];
     if (piece == 'p' && *to_row == 7)
     {
         return 1;
@@ -188,12 +191,12 @@ int will_promote(char board[8][8], int *to_row, int *from_col)
 }
 
 // additional input if pawn can promoted
-void promotion_input(char board[8][8], int *to_row, int *from_col, char *promoted_to)
+void promotion_input(char board[8][8], int *to_row, int *from_row, int *from_col, char *promoted_to)
 {
     int Error_flag = 1;
     while (Error_flag)
     {
-        if (will_promote(board, to_row, from_col))
+        if (will_promote(board, to_row, from_row, from_col))
         {
             printf("Enter the piece you want to promote to\n");
             for (int i = 0; i < 1; i++)
