@@ -35,8 +35,8 @@ void display_board(char board[8][8])
     printf("\n"); // Tabs and newline spaces for better display.
 }
 
-void display_captured_pieces(char white_captured[], int white_count,
-                             char black_captured[], int black_count)
+void display_captured_pieces(char captured_pieces[2][16], int white_count, int black_count)
+
 {
     if (white_count > 0)
     {
@@ -44,7 +44,7 @@ void display_captured_pieces(char white_captured[], int white_count,
     }
     for (int i = 0; i < white_count; i++)
     {
-        printf("%c\t", white_captured[i]);
+        printf("%c\t", captured_pieces[1][i]);
     }
     printf("\n");
     if (black_count > 0)
@@ -54,7 +54,7 @@ void display_captured_pieces(char white_captured[], int white_count,
     for (int j = 0; j < black_count; j++)
     {
 
-        printf("%c\t", black_captured[j]);
+        printf("%c\t", captured_pieces[2][j]);
     }
 }
 

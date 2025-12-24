@@ -50,7 +50,9 @@ int main()
     int white_capture_count = 0;
     int black_capture_count = 0;
 
+    // initial game state saving
     save_game_state(board, captured_pieces, &Gs.is_white_turn);
+
     int game_running = 1;
 
     while (game_running)
@@ -227,6 +229,12 @@ int main()
         // Check for pawn promotion
         promotion_input(board, &to_row, &from_row, &from_col, &promoted_to);
 
+        // Handle pawn promotion
+        if (will_promote(board, &to_row, &from_row, &from_col))
+        {
+            promote_pawn(board, torow, tocol, promoted_to);
+        }
+
         // Store piece information before move
         char moving_piece = Gs.board[from_row][from_col];
 
@@ -235,7 +243,32 @@ int main()
 
         // Handle captured pieces
 
-        // Handle pawn promotion
+        if ((captured_piece == '-') || (captured_piece == '.'))
+        {
+            continue;
+        }
+        else
+        {
+            if (is_white_piece(captured_piece))
+            {
+                white_capture_count++;
+                captured_pieces[1][white_capture_count] = captured_piece;
+            }
+            else
+            {
+                black_capture_count++;
+                captured_pieces[2][black_capture_count] = captured_piece;
+            }
+        }
+
+        undo_flag = 0; // after each move
+        game_count++;  // after each move
+        saving_correction(game_count);
+        save_game_state(board, captured_pieces, &Gs.is_white_turn);
+        printf("\033[2J\033[H"); // cleaning terminal before each display
+        display_board(board);
+        display_captured_pieces(captured_pieces, white_capture_count, black_capture_count);
+        display_turn(Gs.is_white_turn);
 
         // Update castling rights based on piece movements
         if (tolower(moving_piece) == 'k')
@@ -280,3 +313,7 @@ int main()
     printf("\nGame Over! Thanks for playing.\n");
     return 0;
 }
+
+// where??!!
+//  input_handling(char *from_col_char, char *to_col_char, char *from_row_char, char *to_row_char, char board[8][8], char captured_pieces[2][16], int *is_white_turn, int *is_black_turn, int *game_count, int *undo_flag, int *white_capture_count, int *black_capture_count)
+// testing: is NULL in captured pieces works? for file load , redo ,undo

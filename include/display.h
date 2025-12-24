@@ -25,8 +25,7 @@
 void display_board(char board[8][8]);
 
 // Display captured pieces for both players
-void display_captured_pieces(char white_captured[], int white_count,
-                             char black_captured[], int black_count);
+void display_captured_pieces(char captured_pieces[2][16], int white_count, int black_count);
 
 // Display whose turn it is
 void display_turn(int is_white_turn);

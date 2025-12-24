@@ -23,7 +23,7 @@ int valid_row(char *n)
 
 // scanning inputs and printing Errors
 // scanning inputs and printing Errors
-void input_handling(char *from_col_char, char *to_col_char, char *from_row_char, char *to_row_char, char board[8][8], char captured_pieces[2][16], int *is_white_turn, int *is_black_turn, int *game_count, int *undo_flag)
+void input_handling(char *from_col_char, char *to_col_char, char *from_row_char, char *to_row_char, char board[8][8], char captured_pieces[2][16], int *is_white_turn, int *is_black_turn, int *game_count, int *undo_flag, int *white_capture_count, int *black_capture_count)
 
 {
 
@@ -122,6 +122,7 @@ void input_handling(char *from_col_char, char *to_col_char, char *from_row_char,
 
                                 printf("\033[2J\033[H"); // cleaning terminal
                                 display_board(board);
+                                display_captured_pieces(captured_pieces, white_capture_count, black_capture_count);
                                 display_turn(*is_white_turn);
                             }
                             else
@@ -142,6 +143,7 @@ void input_handling(char *from_col_char, char *to_col_char, char *from_row_char,
                                         *undo_flag -= 1;
                                         printf("\033[2J\033[H"); // cleaning terminal
                                         display_board(board);
+                                        display_captured_pieces(captured_pieces, white_capture_count, black_capture_count);
                                         display_turn(*is_white_turn);
                                     }
 
