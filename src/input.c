@@ -23,7 +23,7 @@ int valid_row(char *n)
 
 // scanning inputs and printing Errors
 // scanning inputs and printing Errors
-void input_handling(char *from_col_char, char *to_col_char, char *from_row_char, char *to_row_char, char board[8][8], char captured_pieces[2][16], int *is_white_turn, int *is_black_turn, int *game_count, int *undo_flag, int *white_capture_count, int *black_capture_count)
+void input_handling(char *from_col_char, char *to_col_char, char *from_row_char, char *to_row_char, char board[8][8], char captured_pieces[2][16], int *is_white_turn, int *is_black_turn, int *game_count, int *undo_flag, int white_capture_count, int black_capture_count)
 
 {
 
@@ -158,9 +158,58 @@ void input_handling(char *from_col_char, char *to_col_char, char *from_row_char,
                                 }
                             }
 
-                            else // if an invalid user input
+                            else
                             {
-                                printf("ERROR!!..Enter move (e.g E2E4) or command (save/load/undo/redo/quit):\n");
+                                // DRAW user input handling
+                                if ((c[0] == 'D') && (c[1] == 'R') && (c[2] == 'A') && (c[3] == 'W'))
+                                {
+                                    printf("%s offers a draw.\n", *is_white_turn ? "White" : "Black");
+                                    printf("%s, do you accept the draw? (y/n): ", *is_white_turn ? "Black" : "White");
+
+                                    char response;
+                                    for (int i = 0; i < 1; i++)
+                                    {
+                                        scanf("%c", &response);
+                                        if ((response == ' ') || (response == '\n') || (response == '\t'))
+                                        {
+                                            i--;
+                                        }
+                                    }
+                                    while (getchar() != '\n')
+                                        ;
+
+                                    if (response == 'y' || response == 'Y')
+                                    {
+                                        printf("###################################\n");
+                                        printf("#                                 #\n");
+                                        printf("#         Draw Accepted           #\n");
+                                        printf("#             Draw🤝              #\n");
+                                        printf("#                                 #\n");
+                                        printf("###################################\n");
+                                        exit(0); // Exit game
+                                    }
+                                    else
+                                    {
+                                        printf("Draw offer declined. Continue playing.\n");
+                                    }
+                                }
+                                else
+                                {
+                                    // RESIGN user input handling
+                                    if ((c[0] == 'R') && (c[1] == 'E') && (c[2] == 'S') && (c[3] == 'I'))
+                                    {
+                                        printf("###################################\n");
+                                        printf("#            RESIGNED              #\n");
+                                        printf("#                                 #\n");
+                                        *is_white_turn ? printf("#            Black Won            #\n") : printf("#            White Won            #\n");
+                                        printf("###################################\n");
+                                        exit(0); // Exit game
+                                    }
+                                    else // if an invalid user input
+                                    {
+                                        printf("ERROR!!..Enter move (e.g E2E4) or command (save/load/undo/redo/draw/resign/quit):\n");
+                                    }
+                                }
                             }
                         }
                     }

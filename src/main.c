@@ -51,14 +51,14 @@ int main()
     int black_capture_count = 0;
 
     // initial game state saving
-    save_game_state(board, captured_pieces, &Gs.is_white_turn);
+    save_game_state(Gs.board, captured_pieces, &Gs.is_white_turn);
 
     int game_running = 1;
 
     while (game_running)
     {
         // Check for draw by insufficient material
-        if (is_draw_by_insufficient_material(board))
+        if (is_draw_by_insufficient_material(Gs.board))
         {
             printf("###################################\n");
             printf("#                                 #\n");
@@ -131,90 +131,13 @@ int main()
         {
             printf("⚠️ ====Check====⚠️ \n");
         }
+        display_turn(Gs.is_white_turn);
 
-        printf("\n%s's turn. Enter your move (e.g., 'e2e4'), or command (DRAW/RESIGN): ",
+        printf("\n%s's turn. Enter your move (e.g., 'e2e4'), or command (SAVE/LOAD/UNDO/REDO/DRAW/RESIGN/QUIT): ",
                Gs.is_white_turn ? "White" : "Black");
 
-        // Read input
-        char c[4];
-        for (int i = 0; i < 4; i++)
-        {
-            scanf("%c", &c[i]);
-            if ((c[i] == ' ') || (c[i] == '\n') || (c[i] == '\t'))
-            {
-                i--;
-            }
-        }
-
-        // Convert to uppercase for command checking
-        for (int i = 0; i < 4; i++)
-        {
-            c[i] = toupper(c[i]);
-        }
-
-        // Clear input buffer
-        while ((getchar()) != '\n')
-            ;
-
-        // Check for DRAW command
-        if ((c[0] == 'D') && (c[1] == 'R') && (c[2] == 'A') && (c[3] == 'W'))
-        {
-            printf("%s offers a draw.\n", Gs.is_white_turn ? "White" : "Black");
-            printf("%s, do you accept the draw? (y/n): ", Gs.is_white_turn ? "Black" : "White");
-
-            char response;
-            for (int i = 0; i < 1; i++)
-            {
-                scanf("%c", &response);
-                if ((response == ' ') || (response == '\n') || (response == '\t'))
-                {
-                    i--;
-                }
-            }
-            while (getchar() != '\n')
-                ;
-
-            if (response == 'y' || response == 'Y')
-            {
-                printf("###################################\n");
-                printf("#                                 #\n");
-                printf("#         Draw Accepted           #\n");
-                printf("#             Draw🤝              #\n");
-                printf("#                                 #\n");
-                printf("###################################\n");
-                break;
-            }
-            else
-            {
-                printf("Draw offer declined. Continue playing.\n");
-                continue;
-            }
-        }
-
-        // Check for RESIGN command
-        if ((c[0] == 'R') && (c[1] == 'E') && (c[2] == 'S') && (c[3] == 'I'))
-        {
-            printf("###################################\n");
-            printf("#            RESIGNED              #\n");
-            printf("#                                 #\n");
-            Gs.is_white_turn ? printf("#            Black Won            #\n") : printf("#            White Won            #\n");
-            printf("###################################\n");
-            break;
-        }
-
-        // Process as normal move
-        fromcol = c[0];
-        fromrow = c[1];
-        tocol = c[2];
-        torow = c[3];
-
-        // Validate input format
-        if (!valid_col(&fromcol) || !valid_col(&tocol) ||
-            !valid_row(&fromrow) || !valid_row(&torow))
-        {
-            printf("ERROR!! Enter move (e.g E2E4) or command (DRAW/RESIGN/SAVE/LOAD/UNDO/REDO/QUIT):\n");
-            continue;
-        }
+        input_handling(&fromcol, &tocol, &fromrow, &torow, board, captured_pieces,
+                       &Gs.is_white_turn, &Gs.is_white_turn, &game_count, &undo_flag, white_capture_count, black_capture_count);
 
         convert_col_index(&fromcol, &tocol, &from_col, &to_col);
         convert_row_index(&fromrow, &torow, &from_row, &to_row);
@@ -227,12 +150,13 @@ int main()
         }
 
         // Check for pawn promotion
-        promotion_input(board, &to_row, &from_row, &from_col, &promoted_to);
+        promotion_input(Gs.board, &to_row, &from_row, &from_col, &promoted_to);
 
         // Handle pawn promotion
-        if (will_promote(board, &to_row, &from_row, &from_col))
+        if (promoted_to != '\0' && can_promote(Gs.board, to_row, to_col))
         {
             promote_pawn(board, torow, tocol, promoted_to);
+            promoted_to = '\0';
         }
 
         // Store piece information before move
@@ -243,32 +167,29 @@ int main()
 
         // Handle captured pieces
 
-        if ((captured_piece == '-') || (captured_piece == '.'))
-        {
-            continue;
-        }
-        else
+        if (captured_piece != '-' && captured_piece != '.')
         {
             if (is_white_piece(captured_piece))
             {
-                white_capture_count++;
+
                 captured_pieces[1][white_capture_count] = captured_piece;
+                black_capture_count++;
             }
             else
             {
-                black_capture_count++;
-                captured_pieces[2][black_capture_count] = captured_piece;
+
+                captured_pieces[0][black_capture_count] = captured_piece;
+                white_capture_count++;
             }
         }
 
         undo_flag = 0; // after each move
         game_count++;  // after each move
         saving_correction(game_count);
-        save_game_state(board, captured_pieces, &Gs.is_white_turn);
+        save_game_state(Gs.board, captured_pieces, &Gs.is_white_turn);
         printf("\033[2J\033[H"); // cleaning terminal before each display
-        display_board(board);
+        display_board(Gs.board);
         display_captured_pieces(captured_pieces, white_capture_count, black_capture_count);
-        display_turn(Gs.is_white_turn);
 
         // Update castling rights based on piece movements
         if (tolower(moving_piece) == 'k')

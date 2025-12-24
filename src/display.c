@@ -51,11 +51,13 @@ void display_captured_pieces(char captured_pieces[2][16], int white_count, int b
     {
         printf("Black captured pieces:\n");
     }
+
     for (int j = 0; j < black_count; j++)
     {
 
         printf("%c\t", captured_pieces[2][j]);
     }
+    printf("\n");
 }
 
 void display_turn(int is_white_turn)
