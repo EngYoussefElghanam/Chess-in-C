@@ -181,11 +181,19 @@ int main()
         {
             if (is_white_piece(captured_piece))
             {
+                while ((captured_pieces[1][black_capture_count - 1]) == '\0' && black_capture_count > 0)
+                {
+                    black_capture_count--;
+                }
                 captured_pieces[1][black_capture_count] = captured_piece;
                 black_capture_count++;
             }
             else
             {
+                while ((captured_pieces[0][white_capture_count - 1]) == '\0' && white_capture_count > 0)
+                {
+                    white_capture_count--;
+                }
                 captured_pieces[0][white_capture_count] = captured_piece;
                 white_capture_count++;
             }
@@ -232,11 +240,10 @@ int main()
         last_move.to_col = to_col;
         last_move.piece_moved = moving_piece;
 
-        // Record position for draw detection
-        record_position(&Gs);
-
         // Switch turns
         Gs.is_white_turn = !Gs.is_white_turn;
+        // Record position for draw detection
+        record_position(&Gs);
         save_game_state(Gs.board, captured_pieces, &Gs.is_white_turn);
     }
 

@@ -114,17 +114,7 @@ void input_handling(char *from_col_char, char *to_col_char, char *from_row_char,
                         if ((c[0] == 'U') && (c[1] == 'N') && (c[2] == 'D') && (c[3] == 'O'))
                         {
                             *game_count -= 1;
-                            if (captured_piece != '-' && captured_piece != '.')
-                            {
-                                if (is_white_piece(captured_piece))
-                                {
-                                    (*black_capture_count)--;
-                                }
-                                else if (is_black_piece(captured_piece))
-                                {
-                                    (*white_capture_count)--;
-                                }
-                            }
+
                             if (undo_game(board, captured_pieces, is_white_turn, *game_count) == 0)
                             {
                                 printf("Undo GAME\n");
@@ -147,17 +137,7 @@ void input_handling(char *from_col_char, char *to_col_char, char *from_row_char,
                                 if (*undo_flag)
                                 {
                                     *game_count += 1;
-                                    if (captured_piece != '-' && captured_piece != '.')
-                                    {
-                                        if (is_white_piece(captured_piece))
-                                        {
-                                            (*black_capture_count)++;
-                                        }
-                                        else if (is_black_piece(captured_piece))
-                                        {
-                                            (*white_capture_count)++;
-                                        }
-                                    }
+
                                     if (undo_game(board, captured_pieces, is_white_turn, *game_count) == 0)
                                     {
                                         printf("Redo GAME\n");

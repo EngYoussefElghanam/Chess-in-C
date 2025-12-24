@@ -1,15 +1,2 @@
-# chess:main
-
-# main:game , moves
-#        gcc main.c -o main
-# game:input
-#        gcc game.c -o game
-# moves:input
-#        gcc moves.c -o moves
-# input:file_io , history
-#        gcc input.c -o input
-# file_io:
-#        gcc file_io.c -o file_io
-# history:
-#        gcc history.c -o history
-
+chess: src/main.c src/moves.c src/board.c src/game.c src/input.c src/history.c src/file_io.c src/display.c 
+	gcc src/main.c src/moves.c src/board.c src/game.c src/input.c src/history.c src/file_io.c src/display.c -o chess 
