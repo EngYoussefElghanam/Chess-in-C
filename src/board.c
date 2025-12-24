@@ -1,4 +1,5 @@
 #include "../include/board.h"
+#include "../include/input.h"
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -92,6 +93,7 @@ int is_black_piece(char piece)
 
 void make_move(char board[8][8], int from_row, int from_col, int to_row, int to_col)
 {
+
     char piece = board[from_row][from_col]; // getting the piece desired to get moved
     board[to_row][to_col] = piece;          // moving it to the desired place
     if ((from_row + from_col) % 2 == 0)     // checking if it is white or black

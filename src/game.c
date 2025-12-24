@@ -247,13 +247,8 @@ int can_promote(char board[8][8], int row, int col)
     return (piece == 'p' && row == 7) || (piece == 'P' && row == 0);
 }
 
-void promote_pawn(char board[8][8], int row, int col, char new_piece)
+void promote_pawn(char board[8][8], int to_row, int to_col, int from_row, int from_col, char new_piece)
 {
-    if (!can_promote(board, row, col))
-    {
-        printf("Not Eligible for promotion\n");
-        return;
-    }
 
     char desired = tolower(new_piece);
     if (desired != 'q' && desired != 'r' &&
@@ -263,9 +258,9 @@ void promote_pawn(char board[8][8], int row, int col, char new_piece)
         return;
     }
 
-    board[row][col] = (board[row][col] == 'p')
-                          ? desired
-                          : toupper(desired);
+    board[to_row][to_col] = (board[from_row][from_col] == 'p')
+                                ? desired
+                                : toupper(desired);
 }
 
 /* ================= LEGAL MOVE CHECK ================= */

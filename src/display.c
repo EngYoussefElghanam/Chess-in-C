@@ -38,24 +38,20 @@ void display_board(char board[8][8])
 void display_captured_pieces(char captured_pieces[2][16], int white_count, int black_count)
 
 {
-    if (white_count > 0)
-    {
-        printf("White captured pieces:\n");
-    }
+
+    printf("White captured pieces:\n");
     for (int i = 0; i < white_count; i++)
     {
-        printf("%c\t", captured_pieces[1][i]);
+        printf("%c\t", captured_pieces[0][i]);
     }
     printf("\n");
-    if (black_count > 0)
-    {
-        printf("Black captured pieces:\n");
-    }
+
+    printf("Black captured pieces:\n");
 
     for (int j = 0; j < black_count; j++)
     {
 
-        printf("%c\t", captured_pieces[2][j]);
+        printf("%c\t", captured_pieces[1][j]);
     }
     printf("\n");
 }

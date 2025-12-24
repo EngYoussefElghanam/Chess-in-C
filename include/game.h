@@ -32,7 +32,7 @@ int is_checkmate(char board[8][8], int is_white_king);
 int is_stalemate(char board[8][8], int is_white_turn);
 
 // Handle pawn promotion (when pawn reaches opposite end)
-void promote_pawn(char board[8][8], int row, int col, char new_piece);
+void promote_pawn(char board[8][8], int to_row, int to_col, int from_row, int from_col, char new_piece);
 
 // Check if a pawn is eligible for promotion
 int can_promote(char board[8][8], int row, int col);

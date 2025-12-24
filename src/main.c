@@ -45,11 +45,11 @@ int main()
             captured_pieces[i][j] = '\0';
         }
     }
-
+    int promote_flag = 0;
     int game_count = 0;
     int white_capture_count = 0;
     int black_capture_count = 0;
-
+    display_captured_pieces(captured_pieces, white_capture_count, black_capture_count);
     // initial game state saving
     save_game_state(Gs.board, captured_pieces, &Gs.is_white_turn);
 
@@ -136,8 +136,8 @@ int main()
         printf("\n%s's turn. Enter your move (e.g., 'e2e4'), or command (SAVE/LOAD/UNDO/REDO/DRAW/RESIGN/QUIT): ",
                Gs.is_white_turn ? "White" : "Black");
 
-        input_handling(&fromcol, &tocol, &fromrow, &torow, board, captured_pieces,
-                       &Gs.is_white_turn, &Gs.is_white_turn, &game_count, &undo_flag, white_capture_count, black_capture_count);
+        input_handling(&fromcol, &tocol, &fromrow, &torow, Gs.board, captured_pieces,
+                       &Gs.is_white_turn, &Gs.is_white_turn, &game_count, &undo_flag, &white_capture_count, &black_capture_count, Gs.board[to_row][to_col]);
 
         convert_col_index(&fromcol, &tocol, &from_col, &to_col);
         convert_row_index(&fromrow, &torow, &from_row, &to_row);
@@ -153,10 +153,9 @@ int main()
         promotion_input(Gs.board, &to_row, &from_row, &from_col, &promoted_to);
 
         // Handle pawn promotion
-        if (promoted_to != '\0' && can_promote(Gs.board, to_row, to_col))
+        if (will_promote(Gs.board, &to_row, &from_row, &from_col))
         {
-            promote_pawn(board, torow, tocol, promoted_to);
-            promoted_to = '\0';
+            promote_flag = 1;
         }
 
         // Store piece information before move
@@ -164,21 +163,30 @@ int main()
 
         // Execute the move and get what was captured
         char captured_piece = execute_move(Gs.board, from_row, from_col, to_row, to_col);
-
+        if (promote_flag)
+        {
+            if (Gs.is_white_turn)
+            {
+                Gs.board[to_row][to_col] = tolower(promoted_to);
+            }
+            else
+            {
+                Gs.board[to_row][to_col] = toupper(promoted_to);
+            }
+            promote_flag = 0;
+            promoted_to = '\0';
+        }
         // Handle captured pieces
-
         if (captured_piece != '-' && captured_piece != '.')
         {
             if (is_white_piece(captured_piece))
             {
-
-                captured_pieces[1][white_capture_count] = captured_piece;
+                captured_pieces[1][black_capture_count] = captured_piece;
                 black_capture_count++;
             }
             else
             {
-
-                captured_pieces[0][black_capture_count] = captured_piece;
+                captured_pieces[0][white_capture_count] = captured_piece;
                 white_capture_count++;
             }
         }
@@ -186,7 +194,7 @@ int main()
         undo_flag = 0; // after each move
         game_count++;  // after each move
         saving_correction(game_count);
-        save_game_state(Gs.board, captured_pieces, &Gs.is_white_turn);
+
         printf("\033[2J\033[H"); // cleaning terminal before each display
         display_board(Gs.board);
         display_captured_pieces(captured_pieces, white_capture_count, black_capture_count);
@@ -229,6 +237,7 @@ int main()
 
         // Switch turns
         Gs.is_white_turn = !Gs.is_white_turn;
+        save_game_state(Gs.board, captured_pieces, &Gs.is_white_turn);
     }
 
     printf("\nGame Over! Thanks for playing.\n");
