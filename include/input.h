@@ -28,7 +28,7 @@ int valid_col(char *c);
 int valid_row(char *n);
 
 // handling inputs and printing Errors
-void input_handling(char *from_col_char, char *to_col_char, char *from_row_char, char *to_row_char, char board[8][8], char captured_pieces[2][16], int *is_white_turn, int *is_black_turn, int *game_count, int *undo_flag, int *white_capture_count, int *black_capture_count, char captured_piece);
+void input_handling(char *from_col_char, char *to_col_char, char *from_row_char, char *to_row_char, char board[8][8], char captured_pieces[2][16], int *is_white_turn, int *is_black_turn, int *game_count, int *undo_flag, int *white_capture_count, int *black_capture_count);
 
 // convert from (A to H)index to(0 to 7)index
 void convert_col_index(char *from_col_char, char *to_col_char, int *from_col, int *to_col);

@@ -54,7 +54,8 @@ int main()
     save_game_state(Gs.board, captured_pieces, &Gs.is_white_turn);
 
     int game_running = 1;
-
+    // Record position for draw detection
+    record_position(&Gs);
     while (game_running)
     {
         // Check for draw by insufficient material
@@ -137,7 +138,7 @@ int main()
                Gs.is_white_turn ? "White" : "Black");
 
         input_handling(&fromcol, &tocol, &fromrow, &torow, Gs.board, captured_pieces,
-                       &Gs.is_white_turn, &Gs.is_white_turn, &game_count, &undo_flag, &white_capture_count, &black_capture_count, Gs.board[to_row][to_col]);
+                       &Gs.is_white_turn, &Gs.is_white_turn, &game_count, &undo_flag, &white_capture_count, &black_capture_count);
 
         convert_col_index(&fromcol, &tocol, &from_col, &to_col);
         convert_row_index(&fromrow, &torow, &from_row, &to_row);
@@ -239,7 +240,6 @@ int main()
         last_move.to_row = to_row;
         last_move.to_col = to_col;
         last_move.piece_moved = moving_piece;
-
         // Switch turns
         Gs.is_white_turn = !Gs.is_white_turn;
         // Record position for draw detection

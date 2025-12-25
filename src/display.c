@@ -13,7 +13,7 @@ void display_board(char board[8][8])
     printf("\n");
     printf("\n");
 
-    for (char i = 7; i >= 0; i--)
+    for (int i = 7; i >= 0; i--)
     { // Print from top to bottom
 
         printf("%d\t", i + 1);

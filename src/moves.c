@@ -106,7 +106,6 @@ int is_square_attacked(char board[8][8], int row, int col, int by_white)
 }
 int is_path_attacked(char board[8][8], int from_row, int from_col, int to_col, int is_white)
 {
-    int col_diff = to_col - from_col;
     int step = (to_col > from_col) ? 1 : -1;
     for (int c = from_col; c != to_col + step; c += step)
     {
@@ -413,7 +412,7 @@ int is_valid_move(gameState *Gs, int from_row, int from_col, int to_row, int to_
     // First check basic movement
     char (*board)[8] = Gs->board;
     int is_white_turn = Gs->is_white_turn;
-    LastMove *last_move = Gs->last_move;
+
     if (!is_valid_move_no_check(Gs, from_row, from_col, to_row, to_col))
     {
         return 0;
