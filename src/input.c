@@ -23,7 +23,7 @@ int valid_row(char *n)
 
 // scanning inputs and printing Errors
 // scanning inputs and printing Errors
-void input_handling(char *from_col_char, char *to_col_char, char *from_row_char, char *to_row_char, char board[8][8], char captured_pieces[2][16], int *is_white_turn, int *is_black_turn, int *game_count, int *undo_flag, int *white_capture_count, int *black_capture_count)
+void input_handling(char *from_col_char, char *to_col_char, char *from_row_char, char *to_row_char, char board[8][8], char captured_pieces[2][16], int *is_white_turn, int *game_count, int *undo_flag, int *white_capture_count, int *black_capture_count)
 
 {
 
@@ -98,7 +98,7 @@ void input_handling(char *from_col_char, char *to_col_char, char *from_row_char,
                         fgets(file_name_input, 100, stdin);
                         if (load_game(file_name_input, board, captured_pieces, is_white_turn) == 0) // successful game loading
                         {
-                            *is_black_turn = !*is_white_turn; // handling the current player turn
+                            // *is_black_turn = !*is_white_turn; // handling the current player turn
                             printf("GAME LOADED\n");
                             printf("\033[2J\033[H"); // cleaning terminal
                             display_board(board);
