@@ -27,11 +27,11 @@ void initialize_board(char board[8][8])
         {
             if ((row + col) % 2 == 0)
             {
-                board[row][col] = '-'; // White square
+                board[row][col] = '.'; // Black square
             }
             else
             {
-                board[row][col] = '.'; // Black square
+                board[row][col] = '-'; // white square
             }
         }
     }
@@ -98,11 +98,11 @@ void make_move(char board[8][8], int from_row, int from_col, int to_row, int to_
     board[to_row][to_col] = piece;          // moving it to the desired place
     if ((from_row + from_col) % 2 == 0)     // checking if it is white or black
     {
-        board[from_row][from_col] = '-'; // white
+        board[from_row][from_col] = '.'; // white
     }
     else
     {
-        board[from_row][from_col] = '.'; // black
+        board[from_row][from_col] = '-'; // black
     }
 }
 
