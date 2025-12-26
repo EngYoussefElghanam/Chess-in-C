@@ -40,11 +40,11 @@ int can_promote(char board[8][8], int row, int col);
 int has_legal_moves(char board[8][8], int is_white_turn);
 
 // Position hashing and repetition detection
-void create_position_hash(gameState *Gs, PositionHash *hash);
-int positions_equal(PositionHash *pos1, PositionHash *pos2);
-int count_position_repetitions(gameState *Gs);
-int is_draw_by_repetition(gameState *Gs);
-void record_position(gameState *Gs);
+void create_position_hash(game_state *Gs, position_hash *hash);
+int positions_equal(position_hash *pos1, position_hash *pos2);
+int count_position_repetitions(game_state *Gs);
+int is_draw_by_repetition(game_state *Gs);
+void record_position(game_state *Gs);
 
 // draw by insufficient material
 int is_draw_by_insufficient_material(char board[8][8]);

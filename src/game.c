@@ -29,7 +29,7 @@ int find_king(char board[8][8], int *king_row, int *king_col, int is_white_king)
 }
 /* ================= POSITION HASHING ================= */
 
-void create_position_hash(gameState *Gs, PositionHash *hash)
+void create_position_hash(game_state *Gs, position_hash *hash)
 {
     // Flatten board into 64-byte array
     for (int i = 0; i < 8; i++)
@@ -67,7 +67,7 @@ void create_position_hash(gameState *Gs, PositionHash *hash)
 
 /* ================= POSITION COMPARISON ================= */
 
-int positions_equal(PositionHash *pos1, PositionHash *pos2)
+int positions_equal(position_hash *pos1, position_hash *pos2)
 {
     // Compare board state
     if (memcmp(pos1->board_state, pos2->board_state, 64) != 0)
@@ -90,9 +90,9 @@ int positions_equal(PositionHash *pos1, PositionHash *pos2)
 
 /* ================= REPETITION DETECTION ================= */
 
-int count_position_repetitions(gameState *Gs)
+int count_position_repetitions(game_state *Gs)
 {
-    PositionHash current;
+    position_hash current;
     create_position_hash(Gs, &current);
 
     int count = 0;
@@ -109,14 +109,14 @@ int count_position_repetitions(gameState *Gs)
     return count;
 }
 
-int is_draw_by_repetition(gameState *Gs)
+int is_draw_by_repetition(game_state *Gs)
 {
     // Threefold repetition: if current position occurred 2 times before,
     // this occurrence makes it the third time
     return (count_position_repetitions(Gs) > 2);
 }
 
-void record_position(gameState *Gs)
+void record_position(game_state *Gs)
 {
     if (Gs->position_count >= MAX_POSITION_HISTORY)
     {
@@ -194,12 +194,12 @@ int is_draw_by_insufficient_material(char board[8][8])
 int is_king_in_check(char board[8][8], int is_white_king)
 {
     int king_row, king_col;
-    LastMove dummy_move = {-1, -1, -1, -1, '\0'};
+    last_move dummy_move = {-1, -1, -1, -1, '\0'};
 
     if (!find_king(board, &king_row, &king_col, is_white_king))
         return 0;
 
-    gameState Gs = {0};
+    game_state Gs = {0};
     memcpy(Gs.board, board, sizeof(Gs.board));
     Gs.is_white_turn = !is_white_king;
     Gs.last_move = &dummy_move;
@@ -267,8 +267,8 @@ void promote_pawn(char board[8][8], int to_row, int to_col, int from_row, int fr
 
 int has_legal_moves(char board[8][8], int is_white_turn)
 {
-    LastMove dummy = {-1, -1, -1, -1, '\0'};
-    gameState Gs = {0};
+    last_move dummy = {-1, -1, -1, -1, '\0'};
+    game_state Gs = {0};
 
     memcpy(Gs.board, board, sizeof(Gs.board));
     Gs.is_white_turn = is_white_turn;

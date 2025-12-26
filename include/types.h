@@ -11,7 +11,7 @@ typedef struct
     int to_row;
     int to_col;
     char piece_moved;
-} LastMove;
+} last_move;
 
 // Define a position hash for tracking repetitions
 typedef struct
@@ -20,7 +20,7 @@ typedef struct
     int castling_rights;  // Encoded castling availability
     int en_passant_col;   // -1 if no en passant, 0-7 for column
     int is_white_turn;
-} PositionHash;
+} position_hash;
 
 // Define gameState structure
 typedef struct
@@ -33,12 +33,12 @@ typedef struct
     int black_rook_a_moved;
     int black_rook_h_moved;
     int white_rook_h_moved;
-    LastMove *last_move;
+    last_move *last_move;
 
     // For repetition detection
-    PositionHash position_history[MAX_POSITION_HISTORY];
+    position_hash position_history[MAX_POSITION_HISTORY];
     int position_count;
     int halfmove_clock; // For 50-move rule
-} gameState;
+} game_state;
 
 #endif

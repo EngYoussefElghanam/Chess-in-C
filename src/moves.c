@@ -114,7 +114,7 @@ int is_path_attacked(char board[8][8], int from_row, int from_col, int to_col, i
     }
     return 0;
 }
-int is_valid_castling(gameState *Gs, int from_row, int from_col, int to_row, int to_col)
+int is_valid_castling(game_state *Gs, int from_row, int from_col, int to_row, int to_col)
 {
     char piece = Gs->board[from_row][from_col];
     int is_white = Gs->is_white_turn;
@@ -221,7 +221,7 @@ int is_valid_castling(gameState *Gs, int from_row, int from_col, int to_row, int
 }
 
 int is_valid_pawn_move(char board[8][8], int from_row, int from_col, int to_row, int to_col, int is_white,
-                       LastMove *last_move)
+                       last_move *last_move)
 {
     int row_diff = to_row - from_row;
     int col_diff = to_col - from_col;
@@ -338,7 +338,7 @@ int is_valid_pawn_move(char board[8][8], int from_row, int from_col, int to_row,
     }
 }
 
-int is_valid_move_no_check(gameState *Gs, int from_row, int from_col, int to_row, int to_col)
+int is_valid_move_no_check(game_state *Gs, int from_row, int from_col, int to_row, int to_col)
 {
     // All your current validation EXCEPT the is_king_in_check part
     if (from_row < 0 || from_row > 7 || from_col < 0 || from_col > 7 ||
@@ -354,7 +354,7 @@ int is_valid_move_no_check(gameState *Gs, int from_row, int from_col, int to_row
     char board[8][8];
     memcpy(board, Gs->board, sizeof(board));
     int is_white_turn = Gs->is_white_turn;
-    LastMove *last_move = Gs->last_move;
+    last_move *last_move = Gs->last_move;
     char piece = get_piece_at(board, from_row, from_col);
     char desired_place = get_piece_at(board, to_row, to_col);
 
@@ -407,7 +407,7 @@ int is_valid_move_no_check(gameState *Gs, int from_row, int from_col, int to_row
 }
 
 // Full validation WITH check prevention
-int is_valid_move(gameState *Gs, int from_row, int from_col, int to_row, int to_col)
+int is_valid_move(game_state *Gs, int from_row, int from_col, int to_row, int to_col)
 {
     // First check basic movement
     char (*board)[8] = Gs->board;

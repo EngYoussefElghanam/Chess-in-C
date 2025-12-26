@@ -15,7 +15,7 @@ int main()
 {
     char board[8][8];
     initialize_board(board);
-    gameState Gs = {0};
+    game_state Gs = {0};
     memcpy(Gs.board, board, sizeof(Gs.board));
     display_board(Gs.board);
     Gs.is_white_turn = 1;
@@ -26,14 +26,14 @@ int main()
     Gs.white_rook_h_moved = 0;
     Gs.white_rook_a_moved = 0;
     Gs.halfmove_clock = 0; // Initialize halfmove clock for 50-move rule
-    LastMove last_move = {-1, -1, -1, -1, '\0'};
+    last_move last_move = {-1, -1, -1, -1, '\0'};
     Gs.last_move = &last_move;
     Gs.position_count = 0;
     int undo_flag = 0;
     char *file = "^&@!~`'.txt";
     remove(file);
 
-    char fromcol, fromrow, tocol, torow;
+    char fromcol_char, fromrow_char, tocol_char, torow_char;
     char promoted_to = '\0';
     int from_row, to_row, from_col, to_col;
     char captured_pieces[2][16];
@@ -150,11 +150,11 @@ int main()
         printf("\n%s's turn. Enter your move (e.g., 'e2e4'), or command (SAVE/LOAD/UNDO/REDO/DRAW/RESIGN/QUIT): ",
                Gs.is_white_turn ? "White" : "Black");
 
-        input_handling(&fromcol, &tocol, &fromrow, &torow, Gs.board, captured_pieces,
+        input_handling(&fromcol_char, &tocol_char, &fromrow_char, &torow_char, Gs.board, captured_pieces,
                        &Gs.is_white_turn, &game_count, &undo_flag, &white_capture_count, &black_capture_count);
 
-        convert_col_index(&fromcol, &tocol, &from_col, &to_col);
-        convert_row_index(&fromrow, &torow, &from_row, &to_row);
+        convert_col_index(&fromcol_char, &tocol_char, &from_col, &to_col);
+        convert_row_index(&fromrow_char, &torow_char, &from_row, &to_row);
 
         // Validate the move
         if (!is_valid_move(&Gs, from_row, from_col, to_row, to_col))
