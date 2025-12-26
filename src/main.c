@@ -25,6 +25,7 @@ int main()
     Gs.black_rook_h_moved = 0;
     Gs.white_rook_h_moved = 0;
     Gs.white_rook_a_moved = 0;
+    Gs.halfmove_clock = 0; // Initialize halfmove clock for 50-move rule
     LastMove last_move = {-1, -1, -1, -1, '\0'};
     Gs.last_move = &last_move;
     Gs.position_count = 0;
@@ -64,6 +65,18 @@ int main()
             printf("###################################\n");
             printf("#                                 #\n");
             printf("#   Draw by insufficient material #\n");
+            printf("#             Draw🤝              #\n");
+            printf("#                                 #\n");
+            printf("###################################\n");
+            break;
+        }
+
+        // Check for 50-move rule
+        if (Gs.halfmove_clock >= 100)
+        {
+            printf("###################################\n");
+            printf("#                                 #\n");
+            printf("#        50-move rule reached     #\n");
             printf("#             Draw🤝              #\n");
             printf("#                                 #\n");
             printf("###################################\n");
@@ -164,6 +177,18 @@ int main()
 
         // Execute the move and get what was captured
         char captured_piece = execute_move(Gs.board, from_row, from_col, to_row, to_col);
+
+        // Update halfmove clock for 50-move rule
+        // Reset to 0 if pawn move or capture, otherwise increment
+        if (tolower(moving_piece) == 'p' || (captured_piece != '-' && captured_piece != '.'))
+        {
+            Gs.halfmove_clock = 0;
+        }
+        else
+        {
+            Gs.halfmove_clock++;
+        }
+
         if (promote_flag)
         {
             if (Gs.is_white_turn)
@@ -253,4 +278,4 @@ int main()
 
 // where??!!
 //  input_handling(char *from_col_char, char *to_col_char, char *from_row_char, char *to_row_char, char board[8][8], char captured_pieces[2][16], int *is_white_turn, int *is_black_turn, int *game_count, int *undo_flag, int *white_capture_count, int *black_capture_count)
-// testing: is NULL in captured pieces works? for file load , redo ,undo
+// testing: is NULL in captured pieces works? for file load , redo ,und

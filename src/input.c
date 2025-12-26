@@ -67,7 +67,7 @@ void input_handling(char *from_col_char, char *to_col_char, char *from_row_char,
             if ((c[0] == 'Q') && (c[1] == 'U') && (c[2] == 'I') && (c[3] == 'T'))
             {
                 printf("Game Quit\n");
-                exit(1); // exit game
+                exit(0); // exit game
             }
             else
             {
@@ -113,6 +113,11 @@ void input_handling(char *from_col_char, char *to_col_char, char *from_row_char,
                     {
                         if ((c[0] == 'U') && (c[1] == 'N') && (c[2] == 'D') && (c[3] == 'O'))
                         {
+                            if (*game_count == 0)
+                            {
+                                printf("Can't undo You haven't moved yet\n");
+                                continue;
+                            }
                             *game_count -= 1;
 
                             if (undo_game(board, captured_pieces, is_white_turn, *game_count) == 0)
