@@ -11,8 +11,9 @@
 // save game function for board,captured pieces and current turn
 int save_game(char *file_name, char board[8][8], char captured_pieces[2][16], int *is_white_turn)
 {
-
-    FILE *file = fopen(file_name, "w");
+    char dest[100] = "saves/";
+    strcat(dest, file_name);
+    FILE *file = fopen(dest, "w");
     if (file == NULL)
     {
         return -1; // error
@@ -33,7 +34,7 @@ int save_game(char *file_name, char board[8][8], char captured_pieces[2][16], in
             for (int j = 0; j < 16; j++)
             {
 
-                fprintf(file, "%c", captured_pieces[i][j]); //// printing the captured pieces to the file
+                fprintf(file, "%c", captured_pieces[i][j]); // printing the captured pieces to the file
             }
         }
 
@@ -47,7 +48,9 @@ int save_game(char *file_name, char board[8][8], char captured_pieces[2][16], in
 // load game functuion for all previous loading
 int load_game(char *file_name, char board[8][8], char captured_pieces[2][16], int *is_white_turn)
 {
-    FILE *file = fopen(file_name, "r");
+    char dest[100] = "saves/";
+    strcat(dest, file_name);
+    FILE *file = fopen(dest, "r");
     if (file == NULL)
     {
         return -1; // error
