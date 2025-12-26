@@ -8,6 +8,7 @@ LDFLAGS =
 # Directories
 SRC_DIR = src
 OBJ_DIR = obj
+SAVE_DIR = saves
 
 # Target
 TARGET = chess
@@ -29,6 +30,8 @@ OBJ_FILES = $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
 
 # Default rule
 all: $(TARGET)
+	@mkdir -p $(SAVE_DIR)
+	@echo "Build complete! Run with: ./$(TARGET) or make run"
 
 # Link
 $(TARGET): $(OBJ_FILES)
@@ -41,13 +44,18 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 
 # Run
 run: $(TARGET)
+	@mkdir -p $(SAVE_DIR)
 	./$(TARGET)
 
 # Clean
 clean:
 	rm -rf $(OBJ_DIR) $(TARGET)
 
+# Clean everything including saves
+cleanall: clean
+	rm -rf $(SAVE_DIR)
+
 # Rebuild
 re: clean all
 
-.PHONY: all run clean re
+.PHONY: all run clean cleanall re
