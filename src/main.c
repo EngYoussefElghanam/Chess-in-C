@@ -144,7 +144,6 @@ int main()
         if (is_king_in_check(Gs.board, Gs.is_white_turn))
         {
             printf("⚠️ ====Check====⚠️ \n");
-            Gs.halfmove_clock = 0;
         }
         display_turn(Gs.is_white_turn);
 
