@@ -144,6 +144,7 @@ int main()
         if (is_king_in_check(Gs.board, Gs.is_white_turn))
         {
             printf("⚠️ ====Check====⚠️ \n");
+            Gs.halfmove_clock = 0;
         }
         display_turn(Gs.is_white_turn);
 
@@ -275,7 +276,3 @@ int main()
     printf("\nGame Over! Thanks for playing.\n");
     return 0;
 }
-
-// where??!!
-//  input_handling(char *from_col_char, char *to_col_char, char *from_row_char, char *to_row_char, char board[8][8], char captured_pieces[2][16], int *is_white_turn, int *is_black_turn, int *game_count, int *undo_flag, int *white_capture_count, int *black_capture_count)
-// testing: is NULL in captured pieces works? for file load , redo ,und
