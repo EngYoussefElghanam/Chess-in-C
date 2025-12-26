@@ -103,6 +103,8 @@ void input_handling(char *from_col_char, char *to_col_char, char *from_row_char,
                             printf("\033[2J\033[H"); // cleaning terminal
                             display_board(board);
                             display_turn(*is_white_turn);
+                            save_game_state(board, captured_pieces, is_white_turn);
+                            *game_count += 1;
                         }
                         else // if returns an error
                         {
